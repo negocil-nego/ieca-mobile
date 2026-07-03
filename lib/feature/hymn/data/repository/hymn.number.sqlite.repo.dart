@@ -52,6 +52,23 @@ class HymnNumberSqliteRepo implements IHymnNumberRepo {
   }
 
   @override
+  Future<Result<List<HymnsNumber>>> findFavouritesByGroup(HymnsGroup hymnsGroup) async {
+    try {
+      final db = await openAppDatabase();
+      final rows = await db.query(
+        'tb_hymns_number',
+        where: 'hymns_group_id = ? AND is_favorite = 1 AND type = ?',
+        whereArgs: [hymnsGroup.id, HymnNumberType.NORMAL],
+        orderBy: 'num ASC',
+      );
+      final list = rows.map((row) => HymnNumberMapper.toMapper(row, hymnsGroup)).toList();
+      return Result.ok(list);
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
+
+  @override
   Future<Result<List<HymnsNumber>>> findFavouritesBySection(Section section) async {
     try {
       final db = await openAppDatabase();

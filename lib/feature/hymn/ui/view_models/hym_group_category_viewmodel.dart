@@ -7,7 +7,11 @@ class HymGroupCategoryViewModel {
     IHymnGroupService? service,
   }) : _service = service ?? HymnGroupService();
 
-  Future<Result<List<HymnsGroup>>> findBySection(Section  section) async {
+  Future<Result<List<HymnsGroup>>> findBySection(Section section) async {
     return await _service.findBySection(section);
+  }
+
+  Future<Result<List<HymnsGroup>>> findFavouriteBySection(Section section) async {
+    return await _service.findFavouriteBySection(section);
   }
 }
