@@ -13,6 +13,14 @@ class InvocationListTile extends StatefulWidget {
 class _InvocationListTileState extends State<InvocationListTile> {
   final _content = ValueNotifier<InvocationContent>(InvocationContentMapper.empty());
   final _viewModel = InvocationContentBottomSheetViewModel();
+  late bool _isFavorite;
+
+  @override
+  void initState() {
+    super.initState();
+    _isFavorite = widget.invocation.isFavorite;
+    _init();
+  }
 
   Future<void> _init() async {
     final result = await _viewModel.findContentFist(widget.invocation);
@@ -24,15 +32,30 @@ class _InvocationListTileState extends State<InvocationListTile> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _init();
-  }
-
-  @override
   void dispose() {
     _content.dispose();
     super.dispose();
+  }
+
+  void _onPressed() {
+    _viewModel.updateLastAccessed(widget.invocation.id);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      constraints: BoxConstraints(
+        maxWidth: double.infinity,
+        maxHeight: MediaQuery.of(context).size.height,
+      ),
+      builder: (context) => InvocationContentBottomSheet(invocation: widget.invocation),
+    );
+  }
+
+  void _onFavorite() {
+    _viewModel.toggleFavorite(widget.invocation.id);
+    setState(() {
+      _isFavorite = !_isFavorite;
+    });
   }
 
   @override
@@ -43,18 +66,9 @@ class _InvocationListTileState extends State<InvocationListTile> {
         number: widget.invocation.position,
         title: widget.invocation.name,
         subtitle: StringUtil.short(value.content),
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            useSafeArea: true,
-            constraints: BoxConstraints(
-              maxWidth: double.infinity,
-              maxHeight: MediaQuery.of(context).size.height,
-            ),
-            builder: (context) => InvocationContentBottomSheet(invocation: widget.invocation),
-          );
-        },
+        isFavorite: _isFavorite,
+        onPressed: _onPressed,
+        onFavorite: _onFavorite,
       ),
     );
   }

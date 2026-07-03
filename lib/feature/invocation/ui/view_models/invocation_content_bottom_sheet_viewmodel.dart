@@ -15,4 +15,12 @@ class InvocationContentBottomSheetViewModel {
   Future<Result<InvocationContent>> findContentFist(InvocationTitle invocation) async {
     return await _service.findContentFist(invocation);
   }
+
+  Future<Result<void>> updateLastAccessed(int id) async {
+    return await _service.updateLastAccessed(id);
+  }
+
+  Future<Result<void>> toggleFavorite(int id) async {
+    return await _service.toggleFavorite(id);
+  }
 }

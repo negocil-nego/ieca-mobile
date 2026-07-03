@@ -7,11 +7,15 @@ final class PsalmsMapper {
   }
 
   static PsalmsTitle toMapper(Map<String, Object?> row, Section section) {
+    final lastAccessedRaw = row['last_accessed_at'] as int?;
     return PsalmsTitle(
       id: row['id'] as int,
       name: row['name'] as String,
       position: row['position'] as int,
       section: section,
+      lastAccessedAt: lastAccessedRaw != null ? DateTime.fromMillisecondsSinceEpoch(lastAccessedRaw) : null,
+      isFavorite: (row['is_favorite'] as int?) == 1,
+      accessCount: (row['access_count'] as int?) ?? 0,
     );
   }
 }

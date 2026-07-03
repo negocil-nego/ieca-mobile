@@ -12,6 +12,9 @@ class HymnsNumber {
   final String label;
   final String type;
   final HymnsGroup hymnsGroup;
+  final DateTime? lastAccessedAt;
+  final bool isFavorite;
+  final int accessCount;
 
    HymnsNumber({
     required this.id,
@@ -19,7 +22,10 @@ class HymnsNumber {
     required this.code,
     required this.label,
     required this.hymnsGroup,
-    this.type = HymnNumberType.NORMAL
+    this.type = HymnNumberType.NORMAL,
+    this.lastAccessedAt,
+    this.isFavorite = false,
+    this.accessCount = 0,
   });
 
   @override

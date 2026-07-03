@@ -22,12 +22,16 @@ final class HymnNumberMapper {
   }
 
   static HymnsNumber toMapper(Map<String, Object?> row, HymnsGroup hymnsGroup) {
+    final lastAccessedRaw = row['last_accessed_at'] as int?;
     return HymnsNumber(
       id: row['id'] as int,
       label: row['label'] as String,
       code: row['code'] as String,
       num: row['num'] as int,
       hymnsGroup: hymnsGroup,
+      lastAccessedAt: lastAccessedRaw != null ? DateTime.fromMillisecondsSinceEpoch(lastAccessedRaw) : null,
+      isFavorite: (row['is_favorite'] as int?) == 1,
+      accessCount: (row['access_count'] as int?) ?? 0,
     );
   }
 }

@@ -14,4 +14,12 @@ class LitanyContentBottomSheetViewModel {
   Future<Result<LitanyContent>> findContentFist(LitanyTitle litanyTitle) async {
     return await _service.findContentFist(litanyTitle);
   }
+
+  Future<Result<void>> updateLastAccessed(int id) async {
+    return await _service.updateLastAccessed(id);
+  }
+
+  Future<Result<void>> toggleFavorite(int id) async {
+    return await _service.toggleFavorite(id);
+  }
 }

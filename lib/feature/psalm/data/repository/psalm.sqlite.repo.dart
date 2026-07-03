@@ -76,4 +76,50 @@ class PsalmSqliteRepo implements IPsalmRepo {
       return Result.error(Exception(e.toString()));
     }
   }
+
+  @override
+  Future<Result<List<PsalmsTitle>>> findFavouritesBySection(Section section) async {
+    try {
+      final db = await openAppDatabase();
+      final rows = await db.query(
+        'tb_psalms_title',
+        where: 'section_id = ? AND is_favorite = 1',
+        whereArgs: [section.id],
+        orderBy: 'position ASC',
+      );
+      final titles = rows.map((row) => PsalmsMapper.toMapper(row, section)).toList();
+      return Result.ok(titles);
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<void>> updateLastAccessed(int id) async {
+    try {
+      final db = await openAppDatabase();
+      final now = DateTime.now().millisecondsSinceEpoch;
+      await db.rawUpdate(
+        'UPDATE tb_psalms_title SET last_accessed_at = ?, access_count = access_count + 1 WHERE id = ?',
+        [now, id],
+      );
+      return Result.ok(null);
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<void>> toggleFavorite(int id) async {
+    try {
+      final db = await openAppDatabase();
+      await db.rawUpdate(
+        'UPDATE tb_psalms_title SET is_favorite = CASE WHEN is_favorite = 1 THEN 0 ELSE 1 END WHERE id = ?',
+        [id],
+      );
+      return Result.ok(null);
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
 }

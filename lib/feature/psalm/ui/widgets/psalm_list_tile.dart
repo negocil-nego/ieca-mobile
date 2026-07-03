@@ -13,6 +13,14 @@ class PsalmListTile extends StatefulWidget {
 class _PsalmListTileState extends State<PsalmListTile> {
   final _content = ValueNotifier<PsalmsContent>(PsalmsContentMapper.empty());
   final _viewModel = PsalmContentBottomSheetViewModel();
+  late bool _isFavorite;
+
+  @override
+  void initState() {
+    super.initState();
+    _isFavorite = widget.psalm.isFavorite;
+    _init();
+  }
 
   Future<void> _init() async {
     final result = await _viewModel.findContentFist(widget.psalm);
@@ -24,15 +32,30 @@ class _PsalmListTileState extends State<PsalmListTile> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _init();
-  }
-
-  @override
   void dispose() {
     _content.dispose();
     super.dispose();
+  }
+
+  void _onPressed() {
+    _viewModel.updateLastAccessed(widget.psalm.id);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      constraints: BoxConstraints(
+        maxWidth: double.infinity,
+        maxHeight: MediaQuery.of(context).size.height,
+      ),
+      builder: (context) => PsalmContentBottomSheet(psalm: widget.psalm),
+    );
+  }
+
+  void _onFavorite() {
+    _viewModel.toggleFavorite(widget.psalm.id);
+    setState(() {
+      _isFavorite = !_isFavorite;
+    });
   }
 
   @override
@@ -44,18 +67,9 @@ class _PsalmListTileState extends State<PsalmListTile> {
           number: widget.psalm.position,
           title: widget.psalm.name,
           subtitle: StringUtil.short(value.content),
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              useSafeArea: true,
-              constraints: BoxConstraints(
-                maxWidth: double.infinity,
-                maxHeight: MediaQuery.of(context).size.height,
-              ),
-              builder: (context) => PsalmContentBottomSheet(psalm: widget.psalm),
-            );
-          },
+          isFavorite: _isFavorite,
+          onPressed: _onPressed,
+          onFavorite: _onFavorite,
         );
       }
     );

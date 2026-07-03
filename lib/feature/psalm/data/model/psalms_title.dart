@@ -5,11 +5,17 @@ class PsalmsTitle {
   final String name;
   final int position;
   final Section section;
+  final DateTime? lastAccessedAt;
+  final bool isFavorite;
+  final int accessCount;
 
   const PsalmsTitle({
     required this.id,
     required this.name,
     required this.position,
     required this.section,
+    this.lastAccessedAt,
+    this.isFavorite = false,
+    this.accessCount = 0,
   });
 }
