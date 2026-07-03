@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:mobile/_import.dart';
+import 'package:provider/provider.dart';
 
 class PageViewApp extends StatefulWidget {
   const PageViewApp({super.key});
@@ -35,6 +36,12 @@ class _PageViewAppState extends State<PageViewApp> {
 
   @override
   Widget build(BuildContext context) {
+    final navIndex = context.watch<NavTabProvider>().navIndex;
+
+    if (_controller.index != navIndex) {
+      _controller.jumpToTab(navIndex);
+    }
+
     return PersistentTabView(
       context,
       controller: _controller,

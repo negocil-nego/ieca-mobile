@@ -20,7 +20,29 @@ class HomeCardTotal extends StatelessWidget {
         if (!snapshot.hasData) return const SizedBox(height: 80, child: Center(child: CircularProgressIndicator()));
 
         final data = snapshot.data as List<int>;
-        final items = {'Hinos': data[2], 'Litanias': data[1], 'Salmos': data[3], 'Invocação': data[0]};
+
+        final items = [
+          _SummaryItem(
+            label: 'Hinos',
+            count: data[2],
+            onTap: () => context.read<NavTabProvider>().navToHymn(),
+          ),
+          _SummaryItem(
+            label: 'Litanias',
+            count: data[1],
+            onTap: () => context.read<NavTabProvider>().navToLitany(),
+          ),
+          _SummaryItem(
+            label: 'Salmos',
+            count: data[3],
+            onTap: () => context.read<NavTabProvider>().navToPsalm(),
+          ),
+          _SummaryItem(
+            label: 'Invocação',
+            count: data[0],
+            onTap: () => context.read<NavTabProvider>().navToInvocation(),
+          ),
+        ];
 
         return GridView.count(
           shrinkWrap: true,
@@ -30,17 +52,28 @@ class HomeCardTotal extends StatelessWidget {
           mainAxisSpacing: 12,
           crossAxisSpacing: 12,
           padding: const EdgeInsets.symmetric(horizontal: 5),
-          children: items.entries.map((e) => _SummaryCard(e.key, e.value)).toList(),
+          children: items.map((item) => _SummaryCard(item: item)).toList(),
         );
       },
     );
   }
 }
 
-class _SummaryCard extends StatelessWidget {
+class _SummaryItem {
   final String label;
   final int count;
-  const _SummaryCard(this.label, this.count);
+  final Function()? onTap;
+
+  _SummaryItem({required this.label, required this.count, required this.onTap});
+}
+
+class _SummaryCard extends StatelessWidget {
+  final _SummaryItem item;
+
+  const _SummaryCard({
+    super.key,
+    required this.item,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,33 +81,56 @@ class _SummaryCard extends StatelessWidget {
       'Hinos': Icons.music_note,
       'Litanias': Icons.description,
       'Salmos': Icons.book,
-      'Invocação': Icons.mic
+      'Invocação': Icons.mic,
     };
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
-      ),
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        alignment: Alignment.centerLeft,
-        child: Row(
-          children: [
-            Icon(icons[label], color: Colors.pinkAccent, size: 20),
-            const SizedBox(width: 10),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('$count', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, height: 1.0,)),
-                const SizedBox(height: 10),
-                Text(label.toUpperCase(), style: const TextStyle(fontSize: 9, color: Colors.grey, fontWeight: FontWeight.w700, height: 1.0,)),
-              ],
-            ),
-          ],
+    return InkWell(
+      onTap: item.onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.grey.shade200),
+        ),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Icon(
+                icons[item.label],
+                color: Colors.pinkAccent,
+                size: 20,
+              ),
+              const SizedBox(width: 10),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${item.count}',
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      height: 1,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    item.label.toUpperCase(),
+                    style: const TextStyle(
+                      fontSize: 9,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w700,
+                      height: 1,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -6,6 +6,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => NavTabProvider()),
         ChangeNotifierProvider(create: (context) => SectionProvider()),
       ],
       child: const IecaHinarioApp(),
