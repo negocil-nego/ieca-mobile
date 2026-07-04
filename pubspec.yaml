@@ -41,6 +41,8 @@ dependencies:
   hugeicons: ^1.1.0
   persistent_bottom_nav_bar: ^6.2.1
   flutter_native_splash: ^2.4.8
+  share_plus: ^13.2.0
+  package_info_plus: ^10.2.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.14.4

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/_import.dart';
+import 'package:share_plus/share_plus.dart' show SharePlus, ShareParams;
 
 class PsalmContentBottomSheet extends StatefulWidget {
   final PsalmsTitle psalm;
@@ -73,6 +74,21 @@ class _PsalmContentBottomSheetState extends State<PsalmContentBottomSheet>
     });
   }
 
+  void _shareAll() async {
+    final result = await _viewModel.findContentByPsalmsTitle(_currentItem);
+    result.when(ok: (items) {
+      final buffer = StringBuffer();
+      buffer.writeln(_currentItem.name);
+      buffer.writeln();
+      for (final item in items) {
+        buffer.writeln(StringUtil.getPersonLabel(item.person));
+        buffer.writeln(item.content);
+        buffer.writeln();
+      }
+      SharePlus.instance.share(ShareParams(text: buffer.toString(), subject: _currentItem.name));
+    }, error: (_) {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -84,6 +100,10 @@ class _PsalmContentBottomSheetState extends State<PsalmContentBottomSheet>
               title: _currentItem.name,
               future: _viewModel.findContentByPsalmsTitle(_currentItem),
               actions: [
+                IconButton(
+                  icon: const Icon(Icons.share),
+                  onPressed: _shareAll,
+                ),
                 IconButton(
                   icon: Icon(
                     _isFavorite ? Icons.favorite : Icons.favorite_border,
@@ -100,13 +120,19 @@ class _PsalmContentBottomSheetState extends State<PsalmContentBottomSheet>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        StringUtil.getPersonLabel(item.person),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                          color: Color(0xFFE61E62),
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            StringUtil.getPersonLabel(item.person),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Color(0xFFE61E62),
+                            ),
+                          ),
+                          const Spacer(),
+                          ContentItemActions(text: item.content),
+                        ],
                       ),
                       const SizedBox(height: 6),
                       Text(

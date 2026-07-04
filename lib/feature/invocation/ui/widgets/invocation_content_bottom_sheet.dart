@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/_import.dart';
+import 'package:share_plus/share_plus.dart' show SharePlus, ShareParams;
 
 class InvocationContentBottomSheet extends StatefulWidget {
   final InvocationTitle invocation;
@@ -72,6 +73,23 @@ class _InvocationContentBottomSheetState extends State<InvocationContentBottomSh
     });
   }
 
+  void _shareAll() async {
+    final result = await _viewModel.findContentByInvocation(_currentItem);
+    result.when(ok: (items) {
+      final buffer = StringBuffer();
+      buffer.writeln(_currentItem.name);
+      buffer.writeln();
+      for (final item in items) {
+        if (item.books != null && item.books!.isNotEmpty) {
+          buffer.writeln(item.books);
+        }
+        buffer.writeln(item.content);
+        buffer.writeln();
+      }
+      SharePlus.instance.share(ShareParams(text: buffer.toString(), subject: _currentItem.name));
+    }, error: (_) {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -83,6 +101,10 @@ class _InvocationContentBottomSheetState extends State<InvocationContentBottomSh
               title: _currentItem.name,
               future: _viewModel.findContentByInvocation(_currentItem),
               actions: [
+                IconButton(
+                  icon: const Icon(Icons.share),
+                  onPressed: _shareAll,
+                ),
                 IconButton(
                   icon: Icon(
                     _isFavorite ? Icons.favorite : Icons.favorite_border,
@@ -98,15 +120,27 @@ class _InvocationContentBottomSheetState extends State<InvocationContentBottomSh
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (item.books != null && item.books!.isNotEmpty)
-                        Text(
-                          item.books!,
-                          style: TextStyle(
-                            fontSize: currentFontSize * 0.8,
-                            color: Colors.grey[600],
-                            fontStyle: FontStyle.italic,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (item.books != null && item.books!.isNotEmpty)
+                                  Text(
+                                    item.books!,
+                                    style: TextStyle(
+                                      fontSize: currentFontSize * 0.8,
+                                      color: Colors.grey[600],
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
-                        ),
+                          ContentItemActions(text: item.content),
+                        ],
+                      ),
                       const SizedBox(height: 6),
                       Text(
                         item.content,

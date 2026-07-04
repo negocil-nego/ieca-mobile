@@ -1,10 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/_import.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
-class AppDrawer extends StatelessWidget {
+class AppDrawer extends StatefulWidget {
   const AppDrawer({super.key});
 
-  static const _appVersion = "1.0.0+1";
+  @override
+  State<AppDrawer> createState() => _AppDrawerState();
+}
+
+class _AppDrawerState extends State<AppDrawer> {
+  String _appVersion = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadVersion();
+  }
+
+  Future<void> _loadVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    if (mounted) {
+      setState(() => _appVersion = "${info.version}+${info.buildNumber}");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +44,7 @@ class AppDrawer extends StatelessWidget {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "v$_appVersion",
+                  _appVersion.isNotEmpty ? "v$_appVersion" : "",
                   style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                 ),
               ],

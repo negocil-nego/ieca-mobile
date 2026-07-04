@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/_import.dart';
+import 'package:share_plus/share_plus.dart' show SharePlus, ShareParams;
 
 class HymnContentBottomSheet extends StatefulWidget {
   final HymnsNumber hymnNumber;
@@ -81,6 +82,27 @@ class _HymnContentBottomSheetState extends State<HymnContentBottomSheet> {
     });
   }
 
+  void _shareAll() async {
+    final result = await _viewModel.findByHymnNumber(_currentHymn);
+    result.when(ok: (items) {
+      final buffer = StringBuffer();
+      buffer.writeln('${_currentHymn.num} - ${_currentHymn.label}');
+      buffer.writeln();
+      int count = 0;
+      for (final item in items) {
+        if (item.typeStanza == HymnContentTypeStanza.CHOIR) {
+          buffer.writeln('REFRÃO');
+        } else {
+          count++;
+          buffer.writeln('VERSO $count');
+        }
+        buffer.writeln(StringUtil.replaceContent(item.content));
+        buffer.writeln();
+      }
+      SharePlus.instance.share(ShareParams(text: buffer.toString(), subject: '${_currentHymn.num} - ${_currentHymn.label}'));
+    }, error: (_) {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -99,6 +121,10 @@ class _HymnContentBottomSheetState extends State<HymnContentBottomSheet> {
                   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
+                IconButton(
+                  icon: const Icon(Icons.share),
+                  onPressed: _shareAll,
+                ),
                 IconButton(
                   icon: Icon(
                     _isFavorite ? Icons.favorite : Icons.favorite_border,
@@ -143,14 +169,20 @@ class _HymnContentBottomSheetState extends State<HymnContentBottomSheet> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          labels[index],
-                          style: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            color: pink,
-                            letterSpacing: 1.2,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              labels[index],
+                              style: const TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                color: pink,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                            const Spacer(),
+                            ContentItemActions(text: item.content),
+                          ],
                         ),
                         const SizedBox(height: 12),
                         Container(
