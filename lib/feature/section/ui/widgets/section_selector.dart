@@ -34,7 +34,7 @@ class _SectionSelectorState extends State<SectionSelector> {
         }
 
         if (snapshot.hasError) {
-          return Center(child: Text('Erro: ${snapshot.error}'));
+          return const SizedBox(width: 80, child: Icon(Icons.error_outline, color: Colors.grey));
         }
 
         final sections = snapshot.data ?? [];

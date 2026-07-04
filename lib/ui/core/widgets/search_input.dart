@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SearchInput extends StatelessWidget {
+class SearchInput extends StatefulWidget {
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
   final Function()? onReset;
@@ -9,25 +9,54 @@ class SearchInput extends StatelessWidget {
   const SearchInput({super.key, this.onReset, this.controller, this.onChanged, this.hintText});
 
   @override
+  State<SearchInput> createState() => _SearchInputState();
+}
+
+class _SearchInputState extends State<SearchInput> {
+  @override
+  void initState() {
+    super.initState();
+    widget.controller?.addListener(_onControllerChanged);
+  }
+
+  void _onControllerChanged() {
+    setState(() {});
+  }
+
+  @override
+  void didUpdateWidget(SearchInput oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.controller != oldWidget.controller) {
+      oldWidget.controller?.removeListener(_onControllerChanged);
+      widget.controller?.addListener(_onControllerChanged);
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.controller?.removeListener(_onControllerChanged);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: TextField(
-        controller: controller,
-        onChanged: onChanged,
+        controller: widget.controller,
+        onChanged: widget.onChanged,
         decoration: InputDecoration(
-          hintText: hintText ?? 'Procurar...',
+          hintText: widget.hintText ?? 'Procurar...',
           hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
           prefixIcon: Icon(Icons.search, color: Color(0xFFD81B60)),
-          suffixIcon: (controller?.text.isNotEmpty ?? false)
+          suffixIcon: (widget.controller?.text.isNotEmpty ?? false)
               ? IconButton(
             icon: const Icon(Icons.clear, color: Colors.grey),
-            onPressed: onReset,
+            onPressed: widget.onReset,
           )
               : null,
           filled: true,
           fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(vertical: 12),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide(color: Colors.grey.shade200),

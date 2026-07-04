@@ -48,7 +48,7 @@ class PageViewModel {
       ),
       navigation: const NavigationDestination(
         icon: AppIcon.invocation,
-        label: "Invocatório",
+        label: "Invocação",
       ),
     ),
 

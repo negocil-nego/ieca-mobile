@@ -16,11 +16,20 @@ class LitanyContentBottomSheet extends StatefulWidget {
 class _LitanyContentBottomSheetState extends State<LitanyContentBottomSheet>
     with FontSizeAdjustment {
   late final LitanyContentBottomSheetViewModel _viewModel;
+  late bool _isFavorite;
 
   @override
   void initState() {
     super.initState();
     _viewModel = LitanyContentBottomSheetViewModel();
+    _isFavorite = widget.litany.isFavorite;
+  }
+
+  void _onFavorite() {
+    _viewModel.toggleFavorite(widget.litany.id);
+    setState(() {
+      _isFavorite = !_isFavorite;
+    });
   }
 
   @override
@@ -28,7 +37,16 @@ class _LitanyContentBottomSheetState extends State<LitanyContentBottomSheet>
     return ContentBottomSheet<LitanyContent>(
       title: widget.litany.name,
       future: _viewModel.findContentByLitanyTitle(widget.litany),
-      actions: fontActions,
+      actions: [
+        IconButton(
+          icon: Icon(
+            _isFavorite ? Icons.favorite : Icons.favorite_border,
+            color: const Color(0xFFE61E62),
+          ),
+          onPressed: _onFavorite,
+        ),
+        ...fontActions,
+      ],
       itemBuilder: (context, item, index) {
         final isCongregation = item.person != "DIRECTOR";
 

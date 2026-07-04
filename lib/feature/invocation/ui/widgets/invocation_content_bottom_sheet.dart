@@ -15,11 +15,20 @@ class InvocationContentBottomSheet extends StatefulWidget {
 
 class _InvocationContentBottomSheetState extends State<InvocationContentBottomSheet> with FontSizeAdjustment {
   late final InvocationContentBottomSheetViewModel _viewModel;
+  late bool _isFavorite;
 
   @override
   void initState() {
     super.initState();
     _viewModel = InvocationContentBottomSheetViewModel();
+    _isFavorite = widget.invocation.isFavorite;
+  }
+
+  void _onFavorite() {
+    _viewModel.toggleFavorite(widget.invocation.id);
+    setState(() {
+      _isFavorite = !_isFavorite;
+    });
   }
 
   @override
@@ -27,7 +36,16 @@ class _InvocationContentBottomSheetState extends State<InvocationContentBottomSh
     return ContentBottomSheet<InvocationContent>(
       title: widget.invocation.name,
       future: _viewModel.findContentByInvocation(widget.invocation),
-      actions: fontActions,
+      actions: [
+        IconButton(
+          icon: Icon(
+            _isFavorite ? Icons.favorite : Icons.favorite_border,
+            color: const Color(0xFFE61E62),
+          ),
+          onPressed: _onFavorite,
+        ),
+        ...fontActions,
+      ],
       itemBuilder: (context, item, index) {
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),

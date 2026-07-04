@@ -11,46 +11,40 @@ class HomeAccessCountWidget extends StatelessWidget {
       length: 4,
       child: Column(
         children: [
-          TabBar(
-            labelColor: const Color(0xFFE61E62),
-            unselectedLabelColor: Colors.grey,
-            indicatorColor: const Color(0xFFE61E62),
-            isScrollable: true,
-            labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-            tabs: const [
-              Tab(text: "Hinos"),
-              Tab(text: "Litania"),
-              Tab(text: "Invocação"),
-              Tab(text: "Salmos"),
-            ],
+          _BadgeTabBarCount(
+            tabs: const ["Hinos", "Litania", "Invocação", "Salmos"],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           Expanded(
             child: TabBarView(
               children: [
                 _AccessCountList<HymnsNumber>(
-                  label: "Hinos",
+                  key: const ValueKey("hymn_count"),
                   fetch: (s) => HymnNumberService().findMostAccessedBySection(s),
-                  titleBuilder: (item) => "${item.num} - ${item.label}",
-                  countBuilder: (item) => "${item.accessCount}",
+                  titleFn: (item) => "${item.num} - ${item.label}",
+                  sectionFn: (item) => item.hymnsGroup.name,
+                  countFn: (item) => item.accessCount,
                 ),
                 _AccessCountList<LitanyTitle>(
-                  label: "Litania",
+                  key: const ValueKey("litany_count"),
                   fetch: (s) => LitanyService().findMostAccessedBySection(s),
-                  titleBuilder: (item) => "${item.position} - ${item.name}",
-                  countBuilder: (item) => "${item.accessCount}",
+                  titleFn: (item) => "${item.position} - ${item.name}",
+                  sectionFn: (item) => item.section.name,
+                  countFn: (item) => item.accessCount,
                 ),
                 _AccessCountList<InvocationTitle>(
-                  label: "Invocação",
+                  key: const ValueKey("invocation_count"),
                   fetch: (s) => InvocationService().findMostAccessedBySection(s),
-                  titleBuilder: (item) => "${item.position} - ${item.name}",
-                  countBuilder: (item) => "${item.accessCount}",
+                  titleFn: (item) => "${item.position} - ${item.name}",
+                  sectionFn: (item) => item.section.name,
+                  countFn: (item) => item.accessCount,
                 ),
                 _AccessCountList<PsalmsTitle>(
-                  label: "Salmos",
+                  key: const ValueKey("psalm_count"),
                   fetch: (s) => PsalmService().findMostAccessedBySection(s),
-                  titleBuilder: (item) => "${item.position} - ${item.name}",
-                  countBuilder: (item) => "${item.accessCount}",
+                  titleFn: (item) => "${item.position} - ${item.name}",
+                  sectionFn: (item) => item.section.name,
+                  countFn: (item) => item.accessCount,
                 ),
               ],
             ),
@@ -62,23 +56,24 @@ class HomeAccessCountWidget extends StatelessWidget {
 }
 
 class _AccessCountList<T> extends StatelessWidget {
-  final String label;
   final Future<Result<List<T>>> Function(Section) fetch;
-  final String Function(T) titleBuilder;
-  final String Function(T) countBuilder;
+  final String Function(T) titleFn;
+  final String Function(T) sectionFn;
+  final int Function(T) countFn;
 
   const _AccessCountList({
-    required this.label,
+    super.key,
     required this.fetch,
-    required this.titleBuilder,
-    required this.countBuilder,
+    required this.titleFn,
+    required this.sectionFn,
+    required this.countFn,
   });
 
   @override
   Widget build(BuildContext context) {
     final section = context.watch<SectionProvider>().section;
     return FutureBuilder<Result<List<T>>>(
-      key: ValueKey('${label}_most_${section.id}'),
+      key: ValueKey('count_${section.id}'),
       future: fetch(section),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -86,30 +81,165 @@ class _AccessCountList<T> extends StatelessWidget {
         }
         final result = snapshot.data;
         return result?.when(
-              ok: (data) {
-                if (data.isEmpty) {
-                  return const Center(child: Text("Nenhum acesso."));
-                }
-                return ListView.separated(
-                  itemCount: data.length,
-                  separatorBuilder: (_, _) => const Divider(height: 1),
-                  itemBuilder: (context, index) {
-                    final item = data[index];
-                    return ListTile(
-                      dense: true,
-                      title: Text(titleBuilder(item), style: const TextStyle(fontSize: 13)),
-                      trailing: Text(
-                        countBuilder(item),
-                        style: const TextStyle(fontSize: 11, color: Colors.grey),
-                      ),
-                    );
-                  },
+          ok: (data) {
+            if (data.isEmpty) {
+              return const Center(child: Text("Nenhum acesso."));
+            }
+            return ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              itemCount: data.length,
+              separatorBuilder: (_, _) => const SizedBox(height: 8),
+              itemBuilder: (context, index) {
+                final item = data[index];
+                final count = countFn(item);
+                return _CountCard(
+                  number: index + 1,
+                  title: titleFn(item),
+                  section: sectionFn(item),
+                  count: count,
+                  isFirst: index == 0,
                 );
               },
-              error: (e) => Center(child: Text('Erro: $e')),
-            ) ??
-            const SizedBox.shrink();
+            );
+          },
+          error: (e) => Center(child: Text('Erro: $e')),
+        ) ?? const SizedBox.shrink();
       },
+    );
+  }
+}
+
+class _BadgeTabBarCount extends StatelessWidget {
+  final List<String> tabs;
+
+  const _BadgeTabBarCount({required this.tabs});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: TabBar(
+        indicator: BoxDecoration(
+          color: const Color(0xFFE61E62),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        indicatorSize: TabBarIndicatorSize.tab,
+        dividerColor: Colors.transparent,
+        labelColor: Colors.white,
+        unselectedLabelColor: Colors.grey.shade600,
+        labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+        tabs: tabs.map((t) => Tab(text: t)).toList(),
+      ),
+    );
+  }
+}
+
+class _CountCard extends StatelessWidget {
+  final int number;
+  final String title;
+  final String section;
+  final int count;
+  final bool isFirst;
+
+  const _CountCard({
+    required this.number,
+    required this.title,
+    required this.section,
+    required this.count,
+    this.isFirst = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: isFirst ? const Color(0xFFE61E62).withAlpha(60) : Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(8),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: isFirst ? const Color(0xFFE61E62) : const Color(0xFFE61E62).withAlpha(30),
+              shape: BoxShape.circle,
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              "$number",
+              style: TextStyle(
+                color: isFirst ? Colors.white : const Color(0xFFE61E62),
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF1A1A1A),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  section,
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.grey.shade500,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                "Acessos",
+                style: TextStyle(
+                  fontSize: 9,
+                  color: Colors.grey.shade400,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                "$count",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: isFirst ? const Color(0xFFE61E62) : Colors.grey.shade700,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

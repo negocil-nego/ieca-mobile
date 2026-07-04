@@ -16,11 +16,20 @@ class PsalmContentBottomSheet extends StatefulWidget {
 class _PsalmContentBottomSheetState extends State<PsalmContentBottomSheet>
     with FontSizeAdjustment {
   late final PsalmContentBottomSheetViewModel _viewModel;
+  late bool _isFavorite;
 
   @override
   void initState() {
     super.initState();
     _viewModel = PsalmContentBottomSheetViewModel();
+    _isFavorite = widget.psalm.isFavorite;
+  }
+
+  void _onFavorite() {
+    _viewModel.toggleFavorite(widget.psalm.id);
+    setState(() {
+      _isFavorite = !_isFavorite;
+    });
   }
 
   @override
@@ -28,7 +37,16 @@ class _PsalmContentBottomSheetState extends State<PsalmContentBottomSheet>
     return ContentBottomSheet<PsalmsContent>(
       title: widget.psalm.name,
       future: _viewModel.findContentByPsalmsTitle(widget.psalm),
-      actions: fontActions,
+      actions: [
+        IconButton(
+          icon: Icon(
+            _isFavorite ? Icons.favorite : Icons.favorite_border,
+            color: const Color(0xFFE61E62),
+          ),
+          onPressed: _onFavorite,
+        ),
+        ...fontActions,
+      ],
       itemBuilder: (context, item, index) {
         final isCongregation = item.person != "DIRECTOR";
         return Padding(

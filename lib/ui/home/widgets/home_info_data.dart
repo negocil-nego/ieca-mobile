@@ -7,7 +7,7 @@ class HomeInfoData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 300,
+      height: 340,
       child: DefaultTabController(
         length: 2,
         child: Column(
@@ -16,9 +16,10 @@ class HomeInfoData extends StatelessWidget {
               labelColor: const Color(0xFFE61E62),
               unselectedLabelColor: Colors.grey,
               indicatorColor: const Color(0xFFE61E62),
+              labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
               tabs: const [
-                Tab(text: "Últimos Acessos"),
-                Tab(text: "Mais Acessados"),
+                Tab(text: "Histórico"),
+                Tab(text: "Acessos"),
               ],
             ),
             const SizedBox(height: 8),

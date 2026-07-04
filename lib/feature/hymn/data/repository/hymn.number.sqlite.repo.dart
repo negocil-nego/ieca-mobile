@@ -86,17 +86,28 @@ class HymnNumberSqliteRepo implements IHymnNumberRepo {
     }
   }
 
+  HymnsGroup _mapGroup(Map<String, Object?> row, Section section) {
+    return HymnsGroup(
+      id: row['g_id'] as int,
+      name: row['g_name'] as String,
+      beginning: row['g_beginning'] as int,
+      finished: row['g_finished'] as int,
+      section: section,
+    );
+  }
+
   @override
   Future<Result<List<HymnsNumber>>> findLastAccessedBySection(Section section, {int limit = 10}) async {
     try {
       final db = await openAppDatabase();
       final rows = await db.rawQuery('''
-        SELECT hn.* FROM tb_hymns_number hn
+        SELECT hn.*, hg.id as g_id, hg.name as g_name, hg.beginning as g_beginning, hg.finished as g_finished
+        FROM tb_hymns_number hn
         INNER JOIN tb_hymns_group hg ON hn.hymns_group_id = hg.id
         WHERE hg.section_id = ? AND hn.last_accessed_at IS NOT NULL AND hn.type = ?
         ORDER BY hn.last_accessed_at DESC LIMIT ?
       ''', [section.id, HymnNumberType.NORMAL, limit]);
-      final list = rows.map((row) => HymnNumberMapper.toMapper(row, HymnGroupMapper.empty())).toList();
+      final list = rows.map((row) => HymnNumberMapper.toMapper(row, _mapGroup(row, section))).toList();
       return Result.ok(list);
     } catch (e) {
       return Result.error(Exception(e.toString()));
@@ -108,12 +119,13 @@ class HymnNumberSqliteRepo implements IHymnNumberRepo {
     try {
       final db = await openAppDatabase();
       final rows = await db.rawQuery('''
-        SELECT hn.* FROM tb_hymns_number hn
+        SELECT hn.*, hg.id as g_id, hg.name as g_name, hg.beginning as g_beginning, hg.finished as g_finished
+        FROM tb_hymns_number hn
         INNER JOIN tb_hymns_group hg ON hn.hymns_group_id = hg.id
         WHERE hg.section_id = ? AND hn.type = ?
         ORDER BY hn.access_count DESC LIMIT ?
       ''', [section.id, HymnNumberType.NORMAL, limit]);
-      final list = rows.map((row) => HymnNumberMapper.toMapper(row, HymnGroupMapper.empty())).toList();
+      final list = rows.map((row) => HymnNumberMapper.toMapper(row, _mapGroup(row, section))).toList();
       return Result.ok(list);
     } catch (e) {
       return Result.error(Exception(e.toString()));

@@ -13,13 +13,10 @@ class PageViewApp extends StatefulWidget {
 class _PageViewAppState extends State<PageViewApp> {
   final PageViewModel _pageViewModel = PageViewModel();
   final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
-
-  List<Widget> _buildScreens() {
-    return _pageViewModel.navItems.map((item) => Scaffold(
-      appBar: item.appBar,
-      body: item.screen,
-    )).toList();
-  }
+  late final List<Widget> _screens = _pageViewModel.navItems.map((item) => Scaffold(
+    appBar: item.appBar,
+    body: item.screen,
+  )).toList();
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return List.generate(_pageViewModel.navItems.length, (index) {
@@ -35,17 +32,30 @@ class _PageViewAppState extends State<PageViewApp> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final navIndex = context.watch<NavTabProvider>().navIndex;
+  void initState() {
+    super.initState();
+    context.read<NavTabProvider>().addListener(_onNavChanged);
+  }
 
+  void _onNavChanged() {
+    final navIndex = context.read<NavTabProvider>().navIndex;
     if (_controller.index != navIndex) {
       _controller.jumpToTab(navIndex);
     }
+  }
 
+  @override
+  void dispose() {
+    context.read<NavTabProvider>().removeListener(_onNavChanged);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return PersistentTabView(
       context,
       controller: _controller,
-      screens: _buildScreens(),
+      screens: _screens,
       items: _navBarsItems(),
       navBarStyle: NavBarStyle.style15,
       backgroundColor: Colors.white,

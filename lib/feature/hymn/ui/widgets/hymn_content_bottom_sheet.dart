@@ -13,8 +13,15 @@ class HymnContentBottomSheet extends StatefulWidget {
 class _HymnContentBottomSheetState extends State<HymnContentBottomSheet> {
   final HymContentBottomSheetViewModel _viewModel = HymContentBottomSheetViewModel();
   static const Color pink = Color(0xFFE91E63);
+  late bool _isFavorite;
 
   double _fontSize = 16.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _isFavorite = widget.hymnNumber.isFavorite;
+  }
 
   void _adjustFontSize(bool increase) {
     setState(() {
@@ -23,6 +30,13 @@ class _HymnContentBottomSheetState extends State<HymnContentBottomSheet> {
       } else if (_fontSize > 10.0) {
         _fontSize -= 2.0;
       }
+    });
+  }
+
+  void _onFavorite() {
+    _viewModel.toggleFavorite(widget.hymnNumber.id);
+    setState(() {
+      _isFavorite = !_isFavorite;
     });
   }
 
@@ -44,6 +58,13 @@ class _HymnContentBottomSheetState extends State<HymnContentBottomSheet> {
                   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
+                IconButton(
+                  icon: Icon(
+                    _isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: pink,
+                  ),
+                  onPressed: _onFavorite,
+                ),
                 IconButton(
                   icon: const Icon(Icons.text_decrease),
                   onPressed: () => _adjustFontSize(false),
