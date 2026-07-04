@@ -29,7 +29,7 @@ class ContentBottomSheet<T> extends StatelessWidget {
             child: Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.close),
+                  icon: const Icon(AppIcon.close),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
                 const SizedBox(width: 2),

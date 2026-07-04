@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/_import.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -8,7 +9,7 @@ class AboutPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(AppIcon.arrowBack),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -37,7 +38,7 @@ class AboutPage extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.church_outlined, size: 20, color: Colors.grey.shade700),
+                    Icon(AppIcon.church, size: 20, color: Colors.grey.shade700),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -70,25 +71,25 @@ class AboutPage extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           _InfoCard(
-            icon: Icons.person_outline,
+            icon: AppIcon.person,
             label: "Nome",
             value: "Sedrac Lucas Calupeteca",
           ),
           const SizedBox(height: 10),
           _InfoCard(
-            icon: Icons.phone_outlined,
+            icon: AppIcon.phone,
             label: "Contacto",
             value: "936269780",
           ),
           const SizedBox(height: 10),
           _InfoCard(
-            icon: Icons.email_outlined,
+            icon: AppIcon.email,
             label: "Email",
             value: "slcsecrac@gmail.com",
           ),
           const SizedBox(height: 10),
           _InfoCard(
-            icon: Icons.place_outlined,
+            icon: AppIcon.place,
             label: "Pastorado",
             value: "Nova Vida",
           ),

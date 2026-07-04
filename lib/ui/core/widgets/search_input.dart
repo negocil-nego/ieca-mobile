@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/_import.dart';
 
 class SearchInput extends StatefulWidget {
   final TextEditingController? controller;
@@ -48,10 +49,10 @@ class _SearchInputState extends State<SearchInput> {
         decoration: InputDecoration(
           hintText: widget.hintText ?? 'Procurar...',
           hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
-          prefixIcon: Icon(Icons.search, color: Color(0xFFD81B60)),
+          prefixIcon: Icon(AppIcon.search, color: Color(0xFFD81B60)),
           suffixIcon: (widget.controller?.text.isNotEmpty ?? false)
               ? IconButton(
-            icon: const Icon(Icons.clear, color: Colors.grey),
+            icon: const Icon(AppIcon.clear, color: Colors.grey),
             onPressed: widget.onReset,
           )
               : null,

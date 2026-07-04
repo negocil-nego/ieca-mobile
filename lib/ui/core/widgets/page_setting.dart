@@ -6,6 +6,6 @@ class PageSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(onPressed: () {}, icon: AppIcon.menu);
+    return IconButton(onPressed: () {}, icon: const Icon(AppIcon.menu));
   }
 }

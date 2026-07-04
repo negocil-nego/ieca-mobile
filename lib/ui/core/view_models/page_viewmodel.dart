@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:mobile/_import.dart';
 
 final class NavItemEnum {
@@ -33,8 +32,8 @@ class PageViewModel {
         title: "Hinário",
         subtitle: "Encontre o seu louvor favorito",
       ),
-      navigation: const NavigationDestination(
-        icon: AppIcon.home,
+      navigation: NavigationDestination(
+        icon: AppIcon.homeIcon(),
         label: "Início",
       ),
     ),
@@ -46,8 +45,8 @@ class PageViewModel {
         title: "Invocações",
         subtitle: "Encontre o seu invocação",
       ),
-      navigation: const NavigationDestination(
-        icon: AppIcon.invocation,
+      navigation: NavigationDestination(
+        icon: AppIcon.invocationIcon(),
         label: "Invocação",
       ),
     ),
@@ -59,13 +58,8 @@ class PageViewModel {
         title: "Hinos",
         subtitle: "Encontre o seu louvor",
       ),
-      navigation: const NavigationDestination(
-        icon: HugeIcon(
-          icon: HugeIcons.strokeRoundedMusic3,
-          color: Colors.white,
-          size: 16.0,
-          strokeWidth: 1,
-        ),
+      navigation: NavigationDestination(
+        icon: AppIcon.hymnIcon(color: Colors.white),
         label: "Hino",
       ),
     ),
@@ -77,8 +71,8 @@ class PageViewModel {
         title: "Litania",
         subtitle: "Encontre o seu litania",
       ),
-      navigation: const NavigationDestination(
-        icon: AppIcon.litany,
+      navigation: NavigationDestination(
+        icon: AppIcon.litanyIcon(),
         label: "Litania",
       ),
     ),
@@ -90,8 +84,8 @@ class PageViewModel {
         title: "Salmos",
         subtitle: "Encontre o seu salmo",
       ),
-      navigation: const NavigationDestination(
-        icon: AppIcon.psalms,
+      navigation: NavigationDestination(
+        icon: AppIcon.psalmIcon(),
         label: "Salmos",
       ),
     ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile/_import.dart';
 import 'package:share_plus/share_plus.dart' show SharePlus, ShareParams;
 
 class ContentItemActions extends StatelessWidget {
@@ -18,7 +19,7 @@ class ContentItemActions extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _ActionButton(
-          icon: Icons.copy,
+          icon: AppIcon.copy,
           size: iconSize,
           tooltip: 'Copiar',
           onPressed: () {
@@ -33,7 +34,7 @@ class ContentItemActions extends StatelessWidget {
         ),
         const SizedBox(width: 12),
         _ActionButton(
-          icon: Icons.share,
+          icon: AppIcon.share,
           size: iconSize,
           tooltip: 'Partilhar',
           onPressed: () => SharePlus.instance.share(ShareParams(text: text)),

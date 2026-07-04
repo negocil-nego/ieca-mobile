@@ -61,7 +61,7 @@ class NoResultsView extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          AppIcon.noResults,
+          AppIcon.noResultsIcon(),
           const SizedBox(height: 24),
 
           const Text(

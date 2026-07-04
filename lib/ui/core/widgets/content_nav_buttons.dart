@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/_import.dart';
 
 class ContentNavButtons extends StatelessWidget {
   final bool hasPrevious;
@@ -26,7 +27,7 @@ class ContentNavButtons extends StatelessWidget {
             backgroundColor: hasPrevious ? const Color(0xFFE61E62) : Colors.grey.shade300,
             onPressed: hasPrevious ? onPrevious : null,
             child: Icon(
-              Icons.chevron_left,
+              AppIcon.chevronLeft,
               color: hasPrevious ? Colors.white : Colors.grey.shade500,
             ),
           ),
@@ -35,7 +36,7 @@ class ContentNavButtons extends StatelessWidget {
             backgroundColor: hasNext ? const Color(0xFFE61E62) : Colors.grey.shade300,
             onPressed: hasNext ? onNext : null,
             child: Icon(
-              Icons.chevron_right,
+              AppIcon.chevronRight,
               color: hasNext ? Colors.white : Colors.grey.shade500,
             ),
           ),

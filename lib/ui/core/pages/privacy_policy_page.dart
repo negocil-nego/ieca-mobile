@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/_import.dart';
 
+
 class PrivacyPolicyPage extends StatelessWidget {
   const PrivacyPolicyPage({super.key});
 
@@ -9,7 +10,7 @@ class PrivacyPolicyPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(AppIcon.arrowBack),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),

@@ -127,7 +127,7 @@ class PageListTile extends StatelessWidget {
             if (onFavorite != null)
               IconButton(
                 icon: Icon(
-                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                  isFavorite ? AppIcon.favorite : AppIcon.favoriteBorder,
                   color: primaryColor,
                   size: 20,
                 ),
@@ -136,7 +136,7 @@ class PageListTile extends StatelessWidget {
                 constraints: const BoxConstraints(),
               ),
             const SizedBox(width: 4),
-            AppIcon.arrowRight,
+            AppIcon.arrowRightIcon(),
           ],
         ),
       );

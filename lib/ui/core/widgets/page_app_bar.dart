@@ -43,7 +43,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
         const SectionSelector(),
         Builder(
           builder: (context) => IconButton(
-            icon: const Icon(Icons.menu),
+            icon: const Icon(AppIcon.menu),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),

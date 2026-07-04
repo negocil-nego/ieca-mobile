@@ -100,10 +100,10 @@ class _PsalmContentBottomSheetState extends State<PsalmContentBottomSheet>
               title: _currentItem.name,
               future: _viewModel.findContentByPsalmsTitle(_currentItem),
               actions: [
-                ActionButton(icon: Icons.share, onPressed: _shareAll),
+                ActionButton(icon: AppIcon.share, onPressed: _shareAll),
                 ActionButton(
-                  icon: Icons.favorite_border,
-                  activeIcon: Icons.favorite,
+                  icon: AppIcon.favoriteBorder,
+                  activeIcon: AppIcon.favorite,
                   isActive: _isFavorite,
                   onPressed: _onFavorite,
                 ),

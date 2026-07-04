@@ -157,7 +157,7 @@ class _HymnNumberCardState extends State<_HymnNumberCard> {
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                _isFavorite ? Icons.favorite : Icons.favorite_border,
+                _isFavorite ? AppIcon.favorite : AppIcon.favoriteBorder,
                 size: 12,
                 color: const Color(0xFFE61E62),
               ),

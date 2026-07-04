@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/_import.dart';
 
 class HomeDayOfSuggestHymn extends StatefulWidget {
   const HomeDayOfSuggestHymn({super.key});
@@ -13,19 +14,19 @@ class _HomeDayOfSuggestHymnState extends State<HomeDayOfSuggestHymn> {
       "label": "HINO DO MÊS",
       "title": "Grandioso és Tu",
       "desc": "Redescubra a majestade da criação através deste hino.",
-      "icon": Icons.music_note
+      "icon": AppIcon.musicNote
     },
     {
       "label": "FEATURED",
       "title": "Liturgia das Horas",
       "desc": "Discover the updated collection of seasonal invocations.",
-      "icon": Icons.star
+      "icon": AppIcon.star
     },
     {
       "label": "RECOMMENDED READING",
       "title": "Litany of the Saints",
       "desc": "Join the congregation in a responsive prayer for divine guidance and grace.",
-      "icon": Icons.menu_book
+      "icon": AppIcon.menuBook
     },
   ];
 

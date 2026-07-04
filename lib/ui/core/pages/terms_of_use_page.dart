@@ -9,7 +9,7 @@ class TermsOfUsePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(AppIcon.arrowBack),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),

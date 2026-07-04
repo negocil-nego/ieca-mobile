@@ -102,10 +102,10 @@ class _InvocationContentBottomSheetState extends State<InvocationContentBottomSh
               future: _viewModel.findContentByInvocation(_currentItem),
               separateActions: true,
               actions: [
-                ActionButton(icon: Icons.share, onPressed: _shareAll),
+                ActionButton(icon: AppIcon.share, onPressed: _shareAll),
                 ActionButton(
-                  icon: Icons.favorite_border,
-                  activeIcon: Icons.favorite,
+                  icon: AppIcon.favoriteBorder,
+                  activeIcon: AppIcon.favorite,
                   isActive: _isFavorite,
                   onPressed: _onFavorite,
                 ),

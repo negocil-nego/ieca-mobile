@@ -112,22 +112,22 @@ class _HymnContentBottomSheetState extends State<HymnContentBottomSheet> {
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             child: Row(
               children: [
-                ActionButton(icon: Icons.close, onPressed: () => Navigator.of(context).pop()),
+                ActionButton(icon: AppIcon.close, onPressed: () => Navigator.of(context).pop()),
                 Text(
                   _currentHymn.num.toString(),
                   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
-                ActionButton(icon: Icons.share, onPressed: _shareAll),
+                ActionButton(icon: AppIcon.share, onPressed: _shareAll),
                 ActionButton(
-                  icon: Icons.favorite_border,
-                  activeIcon: Icons.favorite,
+                  icon: AppIcon.favoriteBorder,
+                  activeIcon: AppIcon.favorite,
                   isActive: _isFavorite,
                   color: pink,
                   onPressed: _onFavorite,
                 ),
-                ActionButton(icon: Icons.text_decrease, onPressed: () => _adjustFontSize(false)),
-                ActionButton(icon: Icons.text_increase, onPressed: () => _adjustFontSize(true)),
+                ActionButton(icon: AppIcon.textDecrease, onPressed: () => _adjustFontSize(false)),
+                ActionButton(icon: AppIcon.textIncrease, onPressed: () => _adjustFontSize(true)),
               ],
             ),
           ),

@@ -78,10 +78,10 @@ class _SummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final icons = {
-      'Hinos': Icons.music_note,
-      'Litanias': Icons.description,
-      'Salmos': Icons.book,
-      'Invocação': Icons.mic,
+      'Hinos': AppIcon.musicNote,
+      'Litanias': AppIcon.description,
+      'Salmos': AppIcon.book,
+      'Invocação': AppIcon.mic,
     };
 
     return InkWell(

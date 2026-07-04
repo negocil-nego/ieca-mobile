@@ -49,7 +49,7 @@ class _SectionSelectorState extends State<SectionSelector> {
                 shape: BoxShape.circle,
               ),
               child: IconButton(
-                icon: const Icon(Icons.close, size: 20),
+                icon: const Icon(AppIcon.close, size: 20),
                 onPressed: () => Navigator.pop(ctx),
                 padding: const EdgeInsets.all(6),
                 constraints: const BoxConstraints(),
@@ -79,7 +79,7 @@ class _SectionSelectorState extends State<SectionSelector> {
         }
 
         if (snapshot.hasError) {
-          return const SizedBox(width: 40, child: Icon(Icons.error_outline, color: Colors.grey));
+          return const SizedBox(width: 40, child: Icon(AppIcon.error, color: Colors.grey));
         }
 
         final sections = snapshot.data ?? [];
@@ -90,7 +90,7 @@ class _SectionSelectorState extends State<SectionSelector> {
 
         return TextButton.icon(
           onPressed: () => _showSectionPicker(context, sections),
-          icon: const Icon(Icons.swap_horiz, size: 18),
+          icon: const Icon(AppIcon.swap, size: 18),
           label: const Text("Seção", style: TextStyle(fontSize: 12)),
           style: TextButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 8),

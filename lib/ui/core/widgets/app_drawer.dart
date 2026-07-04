@@ -54,7 +54,7 @@ class _AppDrawerState extends State<AppDrawer> {
             child: Column(
               children: [
                 ListTile(
-                  leading: const Icon(Icons.privacy_tip_outlined),
+                  leading: const Icon(AppIcon.privacy),
                   title: const Text("Política de privacidade"),
                   onTap: () {
                     Navigator.of(context).pop();
@@ -64,7 +64,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.description_outlined),
+                  leading: const Icon(AppIcon.fileDescription),
                   title: const Text("Termos de uso"),
                   onTap: () {
                     Navigator.of(context).pop();
@@ -74,7 +74,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.info_outline),
+                  leading: const Icon(AppIcon.info),
                   title: const Text("Sobre"),
                   onTap: () {
                     Navigator.of(context).pop();
