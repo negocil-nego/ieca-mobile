@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile/_import.dart';
 
 class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
-
   final String title;
   final String subtitle;
   final Widget? leading;
@@ -21,7 +20,11 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.white,
-      elevation: 0,
+      leadingWidth: 30,
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 5),
+        child: Image.asset(AppAsset.logo),
+      ),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -33,15 +36,10 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Text(
-            subtitle,
-            style: TextStyle(color: Colors.grey, fontSize: 10),
-          ),
+          Text(subtitle, style: TextStyle(color: Colors.grey, fontSize: 10)),
         ],
       ),
-      actions: [
-        const SectionSelector(),
-      ],
+      actions: [const SectionSelector()],
     );
   }
 }

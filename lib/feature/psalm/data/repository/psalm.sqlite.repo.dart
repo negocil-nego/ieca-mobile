@@ -78,6 +78,42 @@ class PsalmSqliteRepo implements IPsalmRepo {
   }
 
   @override
+  Future<Result<List<PsalmsTitle>>> findLastAccessedBySection(Section section, {int limit = 10}) async {
+    try {
+      final db = await openAppDatabase();
+      final rows = await db.query(
+        'tb_psalms_title',
+        where: 'section_id = ? AND last_accessed_at IS NOT NULL',
+        whereArgs: [section.id],
+        orderBy: 'last_accessed_at DESC',
+        limit: limit,
+      );
+      final list = rows.map((row) => PsalmsMapper.toMapper(row, section)).toList();
+      return Result.ok(list);
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<List<PsalmsTitle>>> findMostAccessedBySection(Section section, {int limit = 10}) async {
+    try {
+      final db = await openAppDatabase();
+      final rows = await db.query(
+        'tb_psalms_title',
+        where: 'section_id = ?',
+        whereArgs: [section.id],
+        orderBy: 'access_count DESC',
+        limit: limit,
+      );
+      final list = rows.map((row) => PsalmsMapper.toMapper(row, section)).toList();
+      return Result.ok(list);
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
+
+  @override
   Future<Result<List<PsalmsTitle>>> search(String search, Section section) async {
     try {
       final db = await openAppDatabase();

@@ -8,12 +8,13 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           spacing: 20,
           children: [
             const HomeDayOfSuggestHymn(),
-            const HomeCardTotal()
+            const HomeCardTotal(),
+            const HomeInfoData(),
           ],
         ),
       ),

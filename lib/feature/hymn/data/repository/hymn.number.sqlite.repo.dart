@@ -87,6 +87,40 @@ class HymnNumberSqliteRepo implements IHymnNumberRepo {
   }
 
   @override
+  Future<Result<List<HymnsNumber>>> findLastAccessedBySection(Section section, {int limit = 10}) async {
+    try {
+      final db = await openAppDatabase();
+      final rows = await db.rawQuery('''
+        SELECT hn.* FROM tb_hymns_number hn
+        INNER JOIN tb_hymns_group hg ON hn.hymns_group_id = hg.id
+        WHERE hg.section_id = ? AND hn.last_accessed_at IS NOT NULL AND hn.type = ?
+        ORDER BY hn.last_accessed_at DESC LIMIT ?
+      ''', [section.id, HymnNumberType.NORMAL, limit]);
+      final list = rows.map((row) => HymnNumberMapper.toMapper(row, HymnGroupMapper.empty())).toList();
+      return Result.ok(list);
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<List<HymnsNumber>>> findMostAccessedBySection(Section section, {int limit = 10}) async {
+    try {
+      final db = await openAppDatabase();
+      final rows = await db.rawQuery('''
+        SELECT hn.* FROM tb_hymns_number hn
+        INNER JOIN tb_hymns_group hg ON hn.hymns_group_id = hg.id
+        WHERE hg.section_id = ? AND hn.type = ?
+        ORDER BY hn.access_count DESC LIMIT ?
+      ''', [section.id, HymnNumberType.NORMAL, limit]);
+      final list = rows.map((row) => HymnNumberMapper.toMapper(row, HymnGroupMapper.empty())).toList();
+      return Result.ok(list);
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
+
+  @override
   Future<Result<void>> updateLastAccessed(int id) async {
     try {
       final db = await openAppDatabase();

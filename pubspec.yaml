@@ -71,6 +71,7 @@ flutter:
     - assets/img/logo.png
     - assets/img/ieca_960.png
     - assets/img/ieca_1152.png
+    - assets/img/logo_ieca.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

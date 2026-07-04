@@ -5,6 +5,8 @@ abstract class IPsalmRepo {
   Future<Result<List<PsalmsTitle>>> findBySection(Section section);
   Future<Result<List<PsalmsTitle>>> findFavouritesBySection(Section section);
   Future<Result<List<PsalmsTitle>>> search(String search, Section section);
+  Future<Result<List<PsalmsTitle>>> findLastAccessedBySection(Section section, {int limit = 10});
+  Future<Result<List<PsalmsTitle>>> findMostAccessedBySection(Section section, {int limit = 10});
   Future<Result<void>> updateLastAccessed(int id);
   Future<Result<void>> toggleFavorite(int id);
   Future<int> countBySection(Section section);

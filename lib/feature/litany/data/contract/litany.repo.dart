@@ -6,6 +6,8 @@ abstract class ILitanyRepo {
   Future<Result<List<LitanyTitle>>> findBySection(Section section);
   Future<Result<List<LitanyTitle>>> findFavouritesBySection(Section section);
   Future<Result<List<LitanyTitle>>> search(String search, Section section);
+  Future<Result<List<LitanyTitle>>> findLastAccessedBySection(Section section, {int limit = 10});
+  Future<Result<List<LitanyTitle>>> findMostAccessedBySection(Section section, {int limit = 10});
   Future<Result<void>> updateLastAccessed(int id);
   Future<Result<void>> toggleFavorite(int id);
   Future<int> countBySection(Section section);
