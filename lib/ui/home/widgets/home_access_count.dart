@@ -24,6 +24,7 @@ class HomeAccessCountWidget extends StatelessWidget {
                   titleFn: (item) => "${item.num} - ${item.label}",
                   sectionFn: (item) => item.hymnsGroup.name,
                   countFn: (item) => item.accessCount,
+                  onTapFn: (item) => openSheet(context, HymnContentBottomSheet(hymnNumber: item)),
                 ),
                 _AccessCountList<LitanyTitle>(
                   key: const ValueKey("litany_count"),
@@ -31,6 +32,7 @@ class HomeAccessCountWidget extends StatelessWidget {
                   titleFn: (item) => "${item.position} - ${item.name}",
                   sectionFn: (item) => item.section.name,
                   countFn: (item) => item.accessCount,
+                  onTapFn: (item) => openSheet(context, LitanyContentBottomSheet(litany: item)),
                 ),
                 _AccessCountList<InvocationTitle>(
                   key: const ValueKey("invocation_count"),
@@ -38,6 +40,7 @@ class HomeAccessCountWidget extends StatelessWidget {
                   titleFn: (item) => "${item.position} - ${item.name}",
                   sectionFn: (item) => item.section.name,
                   countFn: (item) => item.accessCount,
+                  onTapFn: (item) => openSheet(context, InvocationContentBottomSheet(invocation: item)),
                 ),
                 _AccessCountList<PsalmsTitle>(
                   key: const ValueKey("psalm_count"),
@@ -45,6 +48,7 @@ class HomeAccessCountWidget extends StatelessWidget {
                   titleFn: (item) => "${item.position} - ${item.name}",
                   sectionFn: (item) => item.section.name,
                   countFn: (item) => item.accessCount,
+                  onTapFn: (item) => openSheet(context, PsalmContentBottomSheet(psalm: item)),
                 ),
               ],
             ),
@@ -60,6 +64,7 @@ class _AccessCountList<T> extends StatelessWidget {
   final String Function(T) titleFn;
   final String Function(T) sectionFn;
   final int Function(T) countFn;
+  final void Function(T) onTapFn;
 
   const _AccessCountList({
     super.key,
@@ -67,6 +72,7 @@ class _AccessCountList<T> extends StatelessWidget {
     required this.titleFn,
     required this.sectionFn,
     required this.countFn,
+    required this.onTapFn,
   });
 
   @override
@@ -98,6 +104,7 @@ class _AccessCountList<T> extends StatelessWidget {
                   section: sectionFn(item),
                   count: count,
                   isFirst: index == 0,
+                  onTap: () => onTapFn(item),
                 );
               },
             );
@@ -144,6 +151,7 @@ class _CountCard extends StatelessWidget {
   final String section;
   final int count;
   final bool isFirst;
+  final VoidCallback? onTap;
 
   const _CountCard({
     required this.number,
@@ -151,11 +159,15 @@ class _CountCard extends StatelessWidget {
     required this.section,
     required this.count,
     this.isFirst = false,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -239,6 +251,7 @@ class _CountCard extends StatelessWidget {
             ],
           ),
         ],
+      ),
       ),
     );
   }

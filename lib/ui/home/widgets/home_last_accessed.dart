@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:mobile/_import.dart';
 import 'package:provider/provider.dart';
 
+void openSheet(BuildContext context, Widget sheet) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    constraints: BoxConstraints(
+      maxWidth: double.infinity,
+      maxHeight: MediaQuery.of(context).size.height,
+    ),
+    builder: (_) => sheet,
+  );
+}
+
 class HomeLastAccessedWidget extends StatelessWidget {
   const HomeLastAccessedWidget({super.key});
 
@@ -24,6 +37,7 @@ class HomeLastAccessedWidget extends StatelessWidget {
                   titleFn: (item) => "${item.num} - ${item.label}",
                   sectionFn: (item) => item.hymnsGroup.name,
                   dateFn: (item) => item.lastAccessedAt,
+                  onTapFn: (item) => openSheet(context, HymnContentBottomSheet(hymnNumber: item)),
                 ),
                 _LastAccessedList<LitanyTitle>(
                   key: const ValueKey("litany_last"),
@@ -31,6 +45,7 @@ class HomeLastAccessedWidget extends StatelessWidget {
                   titleFn: (item) => "${item.position} - ${item.name}",
                   sectionFn: (item) => item.section.name,
                   dateFn: (item) => item.lastAccessedAt,
+                  onTapFn: (item) => openSheet(context, LitanyContentBottomSheet(litany: item)),
                 ),
                 _LastAccessedList<InvocationTitle>(
                   key: const ValueKey("invocation_last"),
@@ -38,6 +53,7 @@ class HomeLastAccessedWidget extends StatelessWidget {
                   titleFn: (item) => "${item.position} - ${item.name}",
                   sectionFn: (item) => item.section.name,
                   dateFn: (item) => item.lastAccessedAt,
+                  onTapFn: (item) => openSheet(context, InvocationContentBottomSheet(invocation: item)),
                 ),
                 _LastAccessedList<PsalmsTitle>(
                   key: const ValueKey("psalm_last"),
@@ -45,6 +61,7 @@ class HomeLastAccessedWidget extends StatelessWidget {
                   titleFn: (item) => "${item.position} - ${item.name}",
                   sectionFn: (item) => item.section.name,
                   dateFn: (item) => item.lastAccessedAt,
+                  onTapFn: (item) => openSheet(context, PsalmContentBottomSheet(psalm: item)),
                 ),
               ],
             ),
@@ -60,6 +77,7 @@ class _LastAccessedList<T> extends StatelessWidget {
   final String Function(T) titleFn;
   final String Function(T) sectionFn;
   final DateTime? Function(T) dateFn;
+  final void Function(T) onTapFn;
 
   const _LastAccessedList({
     super.key,
@@ -67,6 +85,7 @@ class _LastAccessedList<T> extends StatelessWidget {
     required this.titleFn,
     required this.sectionFn,
     required this.dateFn,
+    required this.onTapFn,
   });
 
   String _fmt(DateTime? dt) {
@@ -103,6 +122,7 @@ class _LastAccessedList<T> extends StatelessWidget {
                   trailing: _fmt(dateFn(item)),
                   trailingLabel: "Último acesso",
                   isFirst: index == 0,
+                  onTap: () => onTapFn(item),
                 );
               },
             );
@@ -150,6 +170,7 @@ class _InfoCard extends StatelessWidget {
   final String trailing;
   final String trailingLabel;
   final bool isFirst;
+  final VoidCallback? onTap;
 
   const _InfoCard({
     required this.number,
@@ -158,11 +179,15 @@ class _InfoCard extends StatelessWidget {
     required this.trailing,
     required this.trailingLabel,
     this.isFirst = false,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -246,6 +271,7 @@ class _InfoCard extends StatelessWidget {
             ],
           ),
         ],
+      ),
       ),
     );
   }
