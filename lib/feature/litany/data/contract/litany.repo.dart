@@ -5,6 +5,7 @@ abstract class ILitanyRepo {
   Future<Result<LitanyContent>> findContentFist(LitanyTitle litanyTitle);
   Future<Result<List<LitanyTitle>>> findBySection(Section section);
   Future<Result<List<LitanyTitle>>> findFavouritesBySection(Section section);
+  Future<Result<List<LitanyTitle>>> search(String search, Section section);
   Future<Result<void>> updateLastAccessed(int id);
   Future<Result<void>> toggleFavorite(int id);
   Future<int> countBySection(Section section);

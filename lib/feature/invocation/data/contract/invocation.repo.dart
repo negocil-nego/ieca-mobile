@@ -5,6 +5,7 @@ abstract class IInvocationRepo {
   Future<Result<InvocationContent>> findContentFist(InvocationTitle invocation);
   Future<Result<List<InvocationTitle>>> findBySection(Section section);
   Future<Result<List<InvocationTitle>>> findFavouritesBySection(Section section);
+  Future<Result<List<InvocationTitle>>> search(String search, Section section);
   Future<Result<void>> updateLastAccessed(int id);
   Future<Result<void>> toggleFavorite(int id);
 

@@ -3,8 +3,9 @@ import 'package:mobile/_import.dart';
 
 class InvocationListTile extends StatefulWidget {
   final InvocationTitle invocation;
+  final String? highlightQuery;
 
-  const InvocationListTile({super.key, required this.invocation});
+  const InvocationListTile({super.key, required this.invocation, this.highlightQuery});
 
   @override
   State<InvocationListTile> createState() => _InvocationListTileState();
@@ -66,6 +67,7 @@ class _InvocationListTileState extends State<InvocationListTile> {
         number: widget.invocation.position,
         title: widget.invocation.name,
         subtitle: StringUtil.short(value.content),
+        highlightQuery: widget.highlightQuery,
         isFavorite: _isFavorite,
         onPressed: _onPressed,
         onFavorite: _onFavorite,

@@ -3,8 +3,9 @@ import 'package:mobile/_import.dart';
 
 class PsalmListTile extends StatefulWidget {
   final PsalmsTitle psalm;
+  final String? highlightQuery;
 
-  const PsalmListTile({super.key, required this.psalm});
+  const PsalmListTile({super.key, required this.psalm, this.highlightQuery});
 
   @override
   State<PsalmListTile> createState() => _PsalmListTileState();
@@ -67,6 +68,7 @@ class _PsalmListTileState extends State<PsalmListTile> {
           number: widget.psalm.position,
           title: widget.psalm.name,
           subtitle: StringUtil.short(value.content),
+          highlightQuery: widget.highlightQuery,
           isFavorite: _isFavorite,
           onPressed: _onPressed,
           onFavorite: _onFavorite,

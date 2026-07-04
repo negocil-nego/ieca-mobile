@@ -78,6 +78,24 @@ class PsalmSqliteRepo implements IPsalmRepo {
   }
 
   @override
+  Future<Result<List<PsalmsTitle>>> search(String search, Section section) async {
+    try {
+      final db = await openAppDatabase();
+      final rows = await db.rawQuery('''
+        SELECT DISTINCT t.*
+        FROM tb_psalms_title t
+        INNER JOIN tb_psalms_content c ON c.psalms_title_id = t.id
+        WHERE c.content LIKE ? AND t.section_id = ?
+        ORDER BY t.position ASC
+      ''', ['%$search%', section.id]);
+      final list = rows.map((row) => PsalmsMapper.toMapper(row, section)).toList();
+      return Result.ok(list);
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
+
+  @override
   Future<Result<List<PsalmsTitle>>> findFavouritesBySection(Section section) async {
     try {
       final db = await openAppDatabase();

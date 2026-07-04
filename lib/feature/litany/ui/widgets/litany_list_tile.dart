@@ -3,8 +3,9 @@ import 'package:mobile/_import.dart';
 
 class LitanyListTile extends StatefulWidget {
   final LitanyTitle litany;
+  final String? highlightQuery;
 
-  const LitanyListTile({super.key, required this.litany});
+  const LitanyListTile({super.key, required this.litany, this.highlightQuery});
 
   @override
   State<LitanyListTile> createState() => _LitanyListTileState();
@@ -67,6 +68,7 @@ class _LitanyListTileState extends State<LitanyListTile> {
           number: widget.litany.position,
           title: widget.litany.name,
           subtitle: StringUtil.short(value.content),
+          highlightQuery: widget.highlightQuery,
           isFavorite: _isFavorite,
           onPressed: _onPressed,
           onFavorite: _onFavorite,

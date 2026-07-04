@@ -16,7 +16,6 @@ class _HymnTabFavouriteState extends State<HymnTabFavourite> {
   Widget build(BuildContext context) {
     final section = context.watch<SectionProvider>().section;
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

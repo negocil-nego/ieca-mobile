@@ -78,6 +78,24 @@ class LitanySqliteRepo implements ILitanyRepo {
   }
 
   @override
+  Future<Result<List<LitanyTitle>>> search(String search, Section section) async {
+    try {
+      final db = await openAppDatabase();
+      final rows = await db.rawQuery('''
+        SELECT DISTINCT t.*
+        FROM tb_litany_title t
+        INNER JOIN tb_litany_content c ON c.litany_title_id = t.id
+        WHERE c.content LIKE ? AND t.section_id = ?
+        ORDER BY t.position ASC
+      ''', ['%$search%', section.id]);
+      final list = rows.map((row) => LitanyMapper.toMapper(row, section)).toList();
+      return Result.ok(list);
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
+
+  @override
   Future<Result<List<LitanyTitle>>> findFavouritesBySection(Section section) async {
     try {
       final db = await openAppDatabase();

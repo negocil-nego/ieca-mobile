@@ -21,7 +21,7 @@ class _HymnTabState extends State<HymnTab> {
       builder: (context, groups) {
         if (groups.isEmpty) return const SizedBox.shrink();
         return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          padding: const EdgeInsets.symmetric(vertical: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: groups.map((group) {

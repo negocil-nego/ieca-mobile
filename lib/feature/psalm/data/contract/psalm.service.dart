@@ -7,6 +7,7 @@ abstract class IPsalmService {
   Future<Result<PsalmsContent>> findContentFist(PsalmsTitle psalmsTitle) => repo.findContentFist(psalmsTitle);
   Future<Result<List<PsalmsTitle>>> findBySection(Section section) => repo.findBySection(section);
   Future<Result<List<PsalmsTitle>>> findFavouritesBySection(Section section) => repo.findFavouritesBySection(section);
+  Future<Result<List<PsalmsTitle>>> search(String search, Section section) => repo.search(search, section);
   Future<Result<void>> updateLastAccessed(int id) => repo.updateLastAccessed(id);
   Future<Result<void>> toggleFavorite(int id) => repo.toggleFavorite(id);
   Future<int> countBySection(Section section) => repo.countBySection(section);

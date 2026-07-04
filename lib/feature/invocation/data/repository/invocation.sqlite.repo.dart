@@ -79,6 +79,24 @@ class InvocationSqliteRepo implements IInvocationRepo {
   }
 
   @override
+  Future<Result<List<InvocationTitle>>> search(String search, Section section) async {
+    try {
+      final db = await openAppDatabase();
+      final rows = await db.rawQuery('''
+        SELECT DISTINCT t.*
+        FROM tb_invocation_title t
+        INNER JOIN tb_invocation_content c ON c.invocation_title_id = t.id
+        WHERE c.content LIKE ? AND t.section_id = ?
+        ORDER BY t.position ASC
+      ''', ['%$search%', section.id]);
+      final list = rows.map((row) => InvocationMapper.toMapper(row, section)).toList();
+      return Result.ok(list);
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
+
+  @override
   Future<Result<List<InvocationTitle>>> findFavouritesBySection(Section section) async {
     try {
       final db = await openAppDatabase();
