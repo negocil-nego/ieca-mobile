@@ -16,12 +16,57 @@ class SectionSelector extends StatefulWidget {
 
 class _SectionSelectorState extends State<SectionSelector> {
   late final SectionViewModel _viewModel;
-  int? _selectedId;
 
   @override
   void initState() {
     super.initState();
     _viewModel = widget.viewModel ?? SectionViewModel();
+  }
+
+  void _showSectionPicker(BuildContext context, List<Section> sections) {
+    showDialog(
+      context: context,
+      builder: (ctx) => SimpleDialog(
+        title: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Seção", style: TextStyle(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 4),
+                  Text(
+                    "Selecione a secção do hinário",
+                    style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 8),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.close, size: 20),
+                onPressed: () => Navigator.pop(ctx),
+                padding: const EdgeInsets.all(6),
+                constraints: const BoxConstraints(),
+                color: Colors.grey.shade700,
+              ),
+            ),
+          ],
+        ),
+        children: sections.map((section) => SimpleDialogOption(
+          onPressed: () {
+            Navigator.pop(ctx);
+            this.context.read<SectionProvider>().updateDefault(section);
+          },
+          child: Text(section.name),
+        )).toList(),
+      ),
+    );
   }
 
   @override
@@ -30,38 +75,27 @@ class _SectionSelectorState extends State<SectionSelector> {
       future: _viewModel.load(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const SizedBox(width: 40, child: Center(child: CircularProgressIndicator()));
         }
 
         if (snapshot.hasError) {
-          return const SizedBox(width: 80, child: Icon(Icons.error_outline, color: Colors.grey));
+          return const SizedBox(width: 40, child: Icon(Icons.error_outline, color: Colors.grey));
         }
 
         final sections = snapshot.data ?? [];
 
-        if(sections.isEmpty) {
+        if (sections.isEmpty) {
           return const SizedBox.shrink();
         }
 
-        return SizedBox(
-          width: 80,
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<int>(
-              value: _selectedId,
-              hint: const Text('Seção', style: TextStyle(fontSize: 15),),
-              items: sections.map((section) => DropdownMenuItem(
-                value: section.id,
-                child: Text(section.name, maxLines: 1, overflow: TextOverflow.ellipsis),
-              )).toList(),
-              onChanged: (id) {
-                setState(() => _selectedId = id);
-                if (id != null) {
-                  final section = sections.firstWhere((s) => s.id == id);
-                  context.read<SectionProvider>().updateDefault(section);
-                }
-              },
-              isExpanded: true,
-            ),
+        return TextButton.icon(
+          onPressed: () => _showSectionPicker(context, sections),
+          icon: const Icon(Icons.swap_horiz, size: 18),
+          label: const Text("Seção", style: TextStyle(fontSize: 12)),
+          style: TextButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            minimumSize: Size.zero,
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
         );
       },

@@ -13,9 +13,11 @@ class PageViewApp extends StatefulWidget {
 class _PageViewAppState extends State<PageViewApp> {
   final PageViewModel _pageViewModel = PageViewModel();
   final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
+
   late final List<Widget> _screens = _pageViewModel.navItems.map((item) => Scaffold(
     appBar: item.appBar,
     body: item.screen,
+    drawer: const AppDrawer(),
   )).toList();
 
   List<PersistentBottomNavBarItem> _navBarsItems() {

@@ -39,7 +39,15 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
           Text(subtitle, style: TextStyle(color: Colors.grey, fontSize: 10)),
         ],
       ),
-      actions: [const SectionSelector()],
+      actions: [
+        const SectionSelector(),
+        Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
+      ],
     );
   }
 }
