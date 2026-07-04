@@ -56,17 +56,32 @@ class _AppDrawerState extends State<AppDrawer> {
                 ListTile(
                   leading: const Icon(Icons.privacy_tip_outlined),
                   title: const Text("Política de privacidade"),
-                  onTap: () => Navigator.of(context).pop(),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const PrivacyPolicyPage()),
+                    );
+                  },
                 ),
                 ListTile(
                   leading: const Icon(Icons.description_outlined),
                   title: const Text("Termos de uso"),
-                  onTap: () => Navigator.of(context).pop(),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const TermsOfUsePage()),
+                    );
+                  },
                 ),
                 ListTile(
                   leading: const Icon(Icons.info_outline),
                   title: const Text("Sobre"),
-                  onTap: () => Navigator.of(context).pop(),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const AboutPage()),
+                    );
+                  },
                 ),
               ],
             ),
