@@ -8,6 +8,8 @@ abstract class IInvocationRepo {
   Future<Result<List<InvocationTitle>>> search(String search, Section section);
   Future<Result<List<InvocationTitle>>> findLastAccessedBySection(Section section, {int limit = 10});
   Future<Result<List<InvocationTitle>>> findMostAccessedBySection(Section section, {int limit = 10});
+  Future<Result<InvocationTitle?>> findNext(InvocationTitle current);
+  Future<Result<InvocationTitle?>> findPrevious(InvocationTitle current);
   Future<Result<void>> updateLastAccessed(int id);
   Future<Result<void>> toggleFavorite(int id);
 

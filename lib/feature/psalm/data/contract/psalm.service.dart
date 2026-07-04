@@ -10,6 +10,8 @@ abstract class IPsalmService {
   Future<Result<List<PsalmsTitle>>> search(String search, Section section) => repo.search(search, section);
   Future<Result<List<PsalmsTitle>>> findLastAccessedBySection(Section section, {int limit = 10}) => repo.findLastAccessedBySection(section, limit: limit);
   Future<Result<List<PsalmsTitle>>> findMostAccessedBySection(Section section, {int limit = 10}) => repo.findMostAccessedBySection(section, limit: limit);
+  Future<Result<PsalmsTitle?>> findNext(PsalmsTitle current) => repo.findNext(current);
+  Future<Result<PsalmsTitle?>> findPrevious(PsalmsTitle current) => repo.findPrevious(current);
   Future<Result<void>> updateLastAccessed(int id) => repo.updateLastAccessed(id);
   Future<Result<void>> toggleFavorite(int id) => repo.toggleFavorite(id);
   Future<int> countBySection(Section section) => repo.countBySection(section);

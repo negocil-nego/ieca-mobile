@@ -6,6 +6,7 @@ class ContentBottomSheet<T> extends StatelessWidget {
   final List<Widget> actions;
   final Future<Result<List<T>>> future;
   final Widget Function(BuildContext context, T item, int index) itemBuilder;
+  final Widget? bottom;
 
   const ContentBottomSheet({
     super.key,
@@ -13,6 +14,7 @@ class ContentBottomSheet<T> extends StatelessWidget {
     required this.title,
     required this.future,
     required this.itemBuilder,
+    this.bottom,
   });
 
   @override
@@ -73,6 +75,7 @@ class ContentBottomSheet<T> extends StatelessWidget {
               },
             ),
           ),
+          ?bottom,
         ],
       ),
     );

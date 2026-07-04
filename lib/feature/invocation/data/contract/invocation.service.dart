@@ -10,6 +10,8 @@ abstract class IInvocationService {
   Future<Result<List<InvocationTitle>>> search(String search, Section section) => repo.search(search, section);
   Future<Result<List<InvocationTitle>>> findLastAccessedBySection(Section section, {int limit = 10}) => repo.findLastAccessedBySection(section, limit: limit);
   Future<Result<List<InvocationTitle>>> findMostAccessedBySection(Section section, {int limit = 10}) => repo.findMostAccessedBySection(section, limit: limit);
+  Future<Result<InvocationTitle?>> findNext(InvocationTitle current) => repo.findNext(current);
+  Future<Result<InvocationTitle?>> findPrevious(InvocationTitle current) => repo.findPrevious(current);
   Future<Result<void>> updateLastAccessed(int id) => repo.updateLastAccessed(id);
   Future<Result<void>> toggleFavorite(int id) => repo.toggleFavorite(id);
   Future<int> countBySection(Section section) => repo.countBySection(section);

@@ -19,6 +19,14 @@ class PsalmContentBottomSheetViewModel {
     return await _service.updateLastAccessed(id);
   }
 
+  Future<Result<PsalmsTitle?>> findNext(PsalmsTitle current) async {
+    return await _service.findNext(current);
+  }
+
+  Future<Result<PsalmsTitle?>> findPrevious(PsalmsTitle current) async {
+    return await _service.findPrevious(current);
+  }
+
   Future<Result<void>> toggleFavorite(int id) async {
     return await _service.toggleFavorite(id);
   }

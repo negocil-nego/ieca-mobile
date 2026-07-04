@@ -11,6 +11,8 @@ abstract class IHymnNumberService {
   Future<Result<List<HymnsNumber>>> findFavouritesByGroup(HymnsGroup hymnsGroup) => repo.findFavouritesByGroup(hymnsGroup);
   Future<Result<List<HymnsNumber>>> findLastAccessedBySection(Section section, {int limit = 10}) => repo.findLastAccessedBySection(section, limit: limit);
   Future<Result<List<HymnsNumber>>> findMostAccessedBySection(Section section, {int limit = 10}) => repo.findMostAccessedBySection(section, limit: limit);
+  Future<Result<HymnsNumber?>> findNext(HymnsNumber current) => repo.findNext(current);
+  Future<Result<HymnsNumber?>> findPrevious(HymnsNumber current) => repo.findPrevious(current);
   Future<Result<void>> updateLastAccessed(int id) => repo.updateLastAccessed(id);
   Future<Result<void>> toggleFavorite(int id) => repo.toggleFavorite(id);
 }

@@ -149,6 +149,42 @@ class PsalmSqliteRepo implements IPsalmRepo {
   }
 
   @override
+  Future<Result<PsalmsTitle?>> findNext(PsalmsTitle current) async {
+    try {
+      final db = await openAppDatabase();
+      final rows = await db.query(
+        'tb_psalms_title',
+        where: 'section_id = ? AND position > ?',
+        whereArgs: [current.section.id, current.position],
+        orderBy: 'position ASC',
+        limit: 1,
+      );
+      if (rows.isEmpty) return Result.ok(null);
+      return Result.ok(PsalmsMapper.toMapper(rows.first, current.section));
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<PsalmsTitle?>> findPrevious(PsalmsTitle current) async {
+    try {
+      final db = await openAppDatabase();
+      final rows = await db.query(
+        'tb_psalms_title',
+        where: 'section_id = ? AND position < ?',
+        whereArgs: [current.section.id, current.position],
+        orderBy: 'position DESC',
+        limit: 1,
+      );
+      if (rows.isEmpty) return Result.ok(null);
+      return Result.ok(PsalmsMapper.toMapper(rows.first, current.section));
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
+
+  @override
   Future<Result<void>> updateLastAccessed(int id) async {
     try {
       final db = await openAppDatabase();

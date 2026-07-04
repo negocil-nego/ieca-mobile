@@ -13,14 +13,55 @@ class HymnContentBottomSheet extends StatefulWidget {
 class _HymnContentBottomSheetState extends State<HymnContentBottomSheet> {
   final HymContentBottomSheetViewModel _viewModel = HymContentBottomSheetViewModel();
   static const Color pink = Color(0xFFE91E63);
+  late HymnsNumber _currentHymn;
   late bool _isFavorite;
+  bool _hasNext = false;
+  bool _hasPrevious = false;
 
   double _fontSize = 16.0;
 
   @override
   void initState() {
     super.initState();
+    _currentHymn = widget.hymnNumber;
     _isFavorite = widget.hymnNumber.isFavorite;
+    _checkNav();
+  }
+
+  void _checkNav() async {
+    final next = await _viewModel.findNext(_currentHymn);
+    final prev = await _viewModel.findPrevious(_currentHymn);
+    if (!mounted) return;
+    setState(() {
+      _hasNext = next.when(ok: (v) => v != null, error: (_) => false);
+      _hasPrevious = prev.when(ok: (v) => v != null, error: (_) => false);
+    });
+  }
+
+  void _goNext() async {
+    final result = await _viewModel.findNext(_currentHymn);
+    result.when(ok: (hymn) {
+      if (hymn != null && mounted) {
+        setState(() {
+          _currentHymn = hymn;
+          _isFavorite = hymn.isFavorite;
+        });
+        _checkNav();
+      }
+    }, error: (_) {});
+  }
+
+  void _goPrevious() async {
+    final result = await _viewModel.findPrevious(_currentHymn);
+    result.when(ok: (hymn) {
+      if (hymn != null && mounted) {
+        setState(() {
+          _currentHymn = hymn;
+          _isFavorite = hymn.isFavorite;
+        });
+        _checkNav();
+      }
+    }, error: (_) {});
   }
 
   void _adjustFontSize(bool increase) {
@@ -34,7 +75,7 @@ class _HymnContentBottomSheetState extends State<HymnContentBottomSheet> {
   }
 
   void _onFavorite() {
-    _viewModel.toggleFavorite(widget.hymnNumber.id);
+    _viewModel.toggleFavorite(_currentHymn.id);
     setState(() {
       _isFavorite = !_isFavorite;
     });
@@ -54,7 +95,7 @@ class _HymnContentBottomSheetState extends State<HymnContentBottomSheet> {
                   onPressed: () => Navigator.of(context).pop(),
                 ),
                 Text(
-                  widget.hymnNumber.num.toString(),
+                  _currentHymn.num.toString(),
                   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
@@ -79,8 +120,8 @@ class _HymnContentBottomSheetState extends State<HymnContentBottomSheet> {
           const Divider(height: 1),
           Expanded(
             child: SectionFutureBuilder<HymnsContent>(
-              keyValue: widget.hymnNumber,
-              future: _viewModel.findByHymnNumber(widget.hymnNumber),
+              keyValue: _currentHymn,
+              future: _viewModel.findByHymnNumber(_currentHymn),
               builder: (context, items) {
                 int count = 0;
                 final List<String> labels = items.map((item) {
@@ -137,6 +178,12 @@ class _HymnContentBottomSheetState extends State<HymnContentBottomSheet> {
                 );
               },
             ),
+          ),
+          ContentNavButtons(
+            hasPrevious: _hasPrevious,
+            hasNext: _hasNext,
+            onPrevious: _goPrevious,
+            onNext: _goNext,
           ),
         ],
       ),

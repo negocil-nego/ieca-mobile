@@ -150,6 +150,42 @@ class InvocationSqliteRepo implements IInvocationRepo {
   }
 
   @override
+  Future<Result<InvocationTitle?>> findNext(InvocationTitle current) async {
+    try {
+      final db = await openAppDatabase();
+      final rows = await db.query(
+        'tb_invocation_title',
+        where: 'section_id = ? AND position > ?',
+        whereArgs: [current.section.id, current.position],
+        orderBy: 'position ASC',
+        limit: 1,
+      );
+      if (rows.isEmpty) return Result.ok(null);
+      return Result.ok(InvocationMapper.toMapper(rows.first, current.section));
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<InvocationTitle?>> findPrevious(InvocationTitle current) async {
+    try {
+      final db = await openAppDatabase();
+      final rows = await db.query(
+        'tb_invocation_title',
+        where: 'section_id = ? AND position < ?',
+        whereArgs: [current.section.id, current.position],
+        orderBy: 'position DESC',
+        limit: 1,
+      );
+      if (rows.isEmpty) return Result.ok(null);
+      return Result.ok(InvocationMapper.toMapper(rows.first, current.section));
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
+
+  @override
   Future<Result<void>> updateLastAccessed(int id) async {
     try {
       final db = await openAppDatabase();

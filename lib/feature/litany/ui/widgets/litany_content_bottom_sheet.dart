@@ -16,17 +16,58 @@ class LitanyContentBottomSheet extends StatefulWidget {
 class _LitanyContentBottomSheetState extends State<LitanyContentBottomSheet>
     with FontSizeAdjustment {
   late final LitanyContentBottomSheetViewModel _viewModel;
+  late LitanyTitle _currentItem;
   late bool _isFavorite;
+  bool _hasNext = false;
+  bool _hasPrevious = false;
 
   @override
   void initState() {
     super.initState();
     _viewModel = LitanyContentBottomSheetViewModel();
+    _currentItem = widget.litany;
     _isFavorite = widget.litany.isFavorite;
+    _checkNav();
+  }
+
+  void _checkNav() async {
+    final next = await _viewModel.findNext(_currentItem);
+    final prev = await _viewModel.findPrevious(_currentItem);
+    if (!mounted) return;
+    setState(() {
+      _hasNext = next.when(ok: (v) => v != null, error: (_) => false);
+      _hasPrevious = prev.when(ok: (v) => v != null, error: (_) => false);
+    });
+  }
+
+  void _goNext() async {
+    final result = await _viewModel.findNext(_currentItem);
+    result.when(ok: (item) {
+      if (item != null && mounted) {
+        setState(() {
+          _currentItem = item;
+          _isFavorite = item.isFavorite;
+        });
+        _checkNav();
+      }
+    }, error: (_) {});
+  }
+
+  void _goPrevious() async {
+    final result = await _viewModel.findPrevious(_currentItem);
+    result.when(ok: (item) {
+      if (item != null && mounted) {
+        setState(() {
+          _currentItem = item;
+          _isFavorite = item.isFavorite;
+        });
+        _checkNav();
+      }
+    }, error: (_) {});
   }
 
   void _onFavorite() {
-    _viewModel.toggleFavorite(widget.litany.id);
+    _viewModel.toggleFavorite(_currentItem.id);
     setState(() {
       _isFavorite = !_isFavorite;
     });
@@ -34,60 +75,75 @@ class _LitanyContentBottomSheetState extends State<LitanyContentBottomSheet>
 
   @override
   Widget build(BuildContext context) {
-    return ContentBottomSheet<LitanyContent>(
-      title: widget.litany.name,
-      future: _viewModel.findContentByLitanyTitle(widget.litany),
-      actions: [
-        IconButton(
-          icon: Icon(
-            _isFavorite ? Icons.favorite : Icons.favorite_border,
-            color: const Color(0xFFE61E62),
-          ),
-          onPressed: _onFavorite,
-        ),
-        ...fontActions,
-      ],
-      itemBuilder: (context, item, index) {
-        final isCongregation = item.person != "DIRECTOR";
-
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                StringUtil.getPersonLabel(item.person),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  color: Color(0xFFE61E62),
-                ),
-              ),
-              if (item.books != null && item.books!.isNotEmpty) ...[
-                const SizedBox(height: 4),
-                Text(
-                  item.books!,
-                  style: TextStyle(
-                    fontSize: currentFontSize * 0.8,
-                    color: Colors.grey[600],
-                    fontStyle: FontStyle.italic,
+    return SafeArea(
+      child: Column(
+        children: [
+          Expanded(
+            child: ContentBottomSheet<LitanyContent>(
+              key: ValueKey(_currentItem.id),
+              title: _currentItem.name,
+              future: _viewModel.findContentByLitanyTitle(_currentItem),
+              actions: [
+                IconButton(
+                  icon: Icon(
+                    _isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: const Color(0xFFE61E62),
                   ),
+                  onPressed: _onFavorite,
                 ),
+                ...fontActions,
               ],
-              const SizedBox(height: 6),
-              Text(
-                item.content,
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: currentFontSize,
-                  height: 1.6,
-                  fontWeight: isCongregation ? FontWeight.w600 : FontWeight.normal,
-                ),
-              ),
-            ],
+              itemBuilder: (context, item, index) {
+                final isCongregation = item.person != "DIRECTOR";
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        StringUtil.getPersonLabel(item.person),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Color(0xFFE61E62),
+                        ),
+                      ),
+                      if (item.books != null && item.books!.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          item.books!,
+                          style: TextStyle(
+                            fontSize: currentFontSize * 0.8,
+                            color: Colors.grey[600],
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 6),
+                      Text(
+                        item.content,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: currentFontSize,
+                          height: 1.6,
+                          fontWeight: isCongregation ? FontWeight.w600 : FontWeight.normal,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
-        );
-      },
+          ContentNavButtons(
+            hasPrevious: _hasPrevious,
+            hasNext: _hasNext,
+            onPrevious: _goPrevious,
+            onNext: _goNext,
+          ),
+        ],
+      ),
     );
   }
 }

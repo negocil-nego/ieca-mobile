@@ -18,6 +18,14 @@ class HymContentBottomSheetViewModel {
     return await _service.search(search, section);
   }
 
+  Future<Result<HymnsNumber?>> findNext(HymnsNumber current) async {
+    return await _numberService.findNext(current);
+  }
+
+  Future<Result<HymnsNumber?>> findPrevious(HymnsNumber current) async {
+    return await _numberService.findPrevious(current);
+  }
+
   Future<Result<void>> toggleFavorite(int id) async {
     return await _numberService.toggleFavorite(id);
   }
