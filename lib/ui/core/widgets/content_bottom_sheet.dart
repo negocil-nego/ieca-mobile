@@ -7,6 +7,7 @@ class ContentBottomSheet<T> extends StatelessWidget {
   final Future<Result<List<T>>> future;
   final Widget Function(BuildContext context, T item, int index) itemBuilder;
   final Widget? bottom;
+  final bool separateActions;
 
   const ContentBottomSheet({
     super.key,
@@ -15,6 +16,7 @@ class ContentBottomSheet<T> extends StatelessWidget {
     required this.future,
     required this.itemBuilder,
     this.bottom,
+    this.separateActions = false,
   });
 
   @override
@@ -30,21 +32,43 @@ class ContentBottomSheet<T> extends StatelessWidget {
                   icon: const Icon(Icons.close),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
+                const SizedBox(width: 2),
+                if (!separateActions)
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ),
-                ...actions,
+                  )
+                else
+                  const Spacer(),
+                ...actions.expand(
+                  (w) => [const SizedBox(width: 2), w],
+                ).skip(1),
               ],
             ),
           ),
           const Divider(),
+          if (separateActions)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 8, 8, 4),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           Expanded(
             child: FutureBuilder<Result<List<T>>>(
               future: future,

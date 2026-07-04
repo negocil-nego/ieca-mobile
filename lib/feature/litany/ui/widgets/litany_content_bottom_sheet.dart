@@ -102,16 +102,13 @@ class _LitanyContentBottomSheetState extends State<LitanyContentBottomSheet>
               key: ValueKey(_currentItem.id),
               title: _currentItem.name,
               future: _viewModel.findContentByLitanyTitle(_currentItem),
+              separateActions: true,
               actions: [
-                IconButton(
-                  icon: const Icon(Icons.share),
-                  onPressed: _shareAll,
-                ),
-                IconButton(
-                  icon: Icon(
-                    _isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: const Color(0xFFE61E62),
-                  ),
+                ActionButton(icon: Icons.share, onPressed: _shareAll),
+                ActionButton(
+                  icon: Icons.favorite_border,
+                  activeIcon: Icons.favorite,
+                  isActive: _isFavorite,
                   onPressed: _onFavorite,
                 ),
                 ...fontActions,

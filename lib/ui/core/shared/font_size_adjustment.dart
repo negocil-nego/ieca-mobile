@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/_import.dart';
 
 mixin FontSizeAdjustment<T extends StatefulWidget> on State<T> {
   double _fontSize = 16.0;
@@ -12,13 +13,7 @@ mixin FontSizeAdjustment<T extends StatefulWidget> on State<T> {
   }
 
   List<Widget> get fontActions => [
-    IconButton(
-      onPressed: () => adjustFontSize(-2),
-      icon: const Text("A-", style: TextStyle(fontWeight: FontWeight.bold)),
-    ),
-    IconButton(
-      onPressed: () => adjustFontSize(2),
-      icon: const Text("A+", style: TextStyle(fontWeight: FontWeight.bold)),
-    ),
+    ActionButton(text: "A-", onPressed: () => adjustFontSize(-2)),
+    ActionButton(text: "A+", onPressed: () => adjustFontSize(2)),
   ];
 }
