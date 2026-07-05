@@ -29,7 +29,7 @@ void main() {
         (w) =>
             w is Container &&
             w.decoration is BoxDecoration &&
-            (w.decoration as BoxDecoration).color == const Color(0xFFE61E62) &&
+            (w.decoration as BoxDecoration).color == AppColors.primary &&
             (w.decoration as BoxDecoration).shape == BoxShape.circle,
       ),
       findsOneWidget,

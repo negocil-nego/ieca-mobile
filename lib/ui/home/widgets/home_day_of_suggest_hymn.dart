@@ -1,5 +1,8 @@
+import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mobile/_import.dart';
+import 'package:provider/provider.dart';
 
 class HomeDayOfSuggestHymn extends StatefulWidget {
   const HomeDayOfSuggestHymn({super.key});
@@ -9,43 +12,149 @@ class HomeDayOfSuggestHymn extends StatefulWidget {
 }
 
 class _HomeDayOfSuggestHymnState extends State<HomeDayOfSuggestHymn> {
-  final List<Map<String, dynamic>> _items = [
-    {
+  final _pageController = PageController(viewportFraction: 0.9);
+  final _itemsNotifier = ValueNotifier<List<Map<String, dynamic>>>([]);
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+    _timer = Timer.periodic(const Duration(seconds: 5), (_) => _advance());
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
+    _itemsNotifier.dispose();
+    super.dispose();
+  }
+
+  void _advance() {
+    final items = _itemsNotifier.value;
+    if (items.length < 2) return;
+    final current = _pageController.page!.round();
+    if (current >= items.length - 1) {
+      _pageController.jumpToPage(0);
+    } else {
+      _pageController.animateToPage(current + 1, duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+    }
+  }
+
+  Future<void> _load() async {
+    final section = context.read<SectionProvider>().section;
+    final now = DateTime.now();
+    final seed = now.difference(DateTime(now.year, 1, 1)).inDays;
+
+    final results = await Future.wait([
+      _pickHymn(section, seed),
+      _pickLitany(section, seed),
+      _pickInvocation(section, seed),
+      _pickPsalm(section, seed),
+    ]);
+
+    if (!mounted) return;
+    final items = results.where((r) => r != null).cast<Map<String, dynamic>>().toList();
+    if (items.isEmpty) return;
+    _itemsNotifier.value = items;
+  }
+
+  Future<Map<String, dynamic>?> _pickHymn(Section section, int seed) async {
+    final groups = await HymnGroupService().findBySection(section);
+    final groupList = groups.when(ok: (d) => d, error: (_) => <HymnsGroup>[]);
+    if (groupList.isEmpty) return null;
+    final group = groupList[_seeded(seed, 0, groupList.length)];
+    final numbers = await HymnNumberService().findByHymnsGroup(group);
+    final numList = numbers.when(ok: (d) => d, error: (_) => <HymnsNumber>[]);
+    if (numList.isEmpty) return null;
+    final number = numList[_seeded(seed, 1, numList.length)];
+    final content = await HymnContentService().findByHymnNumber(number);
+    final desc = content.when(
+      ok: (d) => d.isNotEmpty ? d.first.content : '',
+      error: (_) => '',
+    );
+    return {
       "label": "HINO DO MÊS",
-      "title": "Grandioso és Tu",
-      "desc": "Redescubra a majestade da criação através deste hino.",
-      "icon": AppIcon.musicNote
-    },
-    {
-      "label": "FEATURED",
-      "title": "Liturgia das Horas",
-      "desc": "Discover the updated collection of seasonal invocations.",
-      "icon": AppIcon.star
-    },
-    {
-      "label": "RECOMMENDED READING",
-      "title": "Litany of the Saints",
-      "desc": "Join the congregation in a responsive prayer for divine guidance and grace.",
-      "icon": AppIcon.menuBook
-    },
-  ];
+      "title": "${number.num} - ${number.label}",
+      "desc": desc.length > 60 ? '${desc.substring(0, 60)}…' : desc,
+      "icon": AppIcon.musicNote,
+    };
+  }
+
+  Future<Map<String, dynamic>?> _pickLitany(Section section, int seed) async {
+    final items = await LitanyService().findBySection(section);
+    final list = items.when(ok: (d) => d, error: (_) => <LitanyTitle>[]);
+    if (list.isEmpty) return null;
+    final item = list[_seeded(seed, 2, list.length)];
+    final content = await LitanyService().findContentFist(item);
+    final desc = content.when(ok: (d) => d.content, error: (_) => '');
+    return {
+      "label": "LITANIA",
+      "title": item.name,
+      "desc": desc.length > 60 ? '${desc.substring(0, 60)}…' : desc,
+      "icon": AppIcon.menuBook,
+    };
+  }
+
+  Future<Map<String, dynamic>?> _pickInvocation(Section section, int seed) async {
+    final items = await InvocationService().findBySection(section);
+    final list = items.when(ok: (d) => d, error: (_) => <InvocationTitle>[]);
+    if (list.isEmpty) return null;
+    final item = list[_seeded(seed, 3, list.length)];
+    final content = await InvocationService().findContentFist(item);
+    final desc = content.when(ok: (d) => d.content, error: (_) => '');
+    return {
+      "label": "INVOCAÇÃO",
+      "title": item.name,
+      "desc": desc.length > 60 ? '${desc.substring(0, 60)}…' : desc,
+      "icon": AppIcon.mic,
+    };
+  }
+
+  Future<Map<String, dynamic>?> _pickPsalm(Section section, int seed) async {
+    final items = await PsalmService().findBySection(section);
+    final list = items.when(ok: (d) => d, error: (_) => <PsalmsTitle>[]);
+    if (list.isEmpty) return null;
+    final item = list[_seeded(seed, 4, list.length)];
+    final content = await PsalmService().findContentFist(item);
+    final desc = content.when(ok: (d) => d.content, error: (_) => '');
+    return {
+      "label": "SALMO",
+      "title": item.name,
+      "desc": desc.length > 60 ? '${desc.substring(0, 60)}…' : desc,
+      "icon": AppIcon.book,
+    };
+  }
+
+  int _seeded(int daySeed, int offset, int max) {
+    return Random(daySeed * 31 + offset * 7).nextInt(max);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 160,
-      child: PageView.builder(
-        controller: PageController(viewportFraction: 0.9),
-        itemCount: _items.length,
-        pageSnapping: true,
-        itemBuilder: (context, index) {
-          return Container(
-            margin: EdgeInsets.only(
-              left: index == 0 ? 0 : 16,
-              right: index == _items.length - 1 ? 0 : 0,
-            ),
-            child: _buildCard(_items[index]),
-          );
+    return RepaintBoundary(
+      child: ValueListenableBuilder<List<Map<String, dynamic>>>(
+        valueListenable: _itemsNotifier,
+        builder: (context, items, _) {
+        if (items.isEmpty) {
+          return const SizedBox(height: 160, child: Center(child: CircularProgressIndicator()));
+        }
+        final realCount = items.length;
+        return SizedBox(
+          height: 160,
+          child: PageView.builder(
+            controller: _pageController,
+            itemCount: realCount,
+            pageSnapping: true,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: EdgeInsets.only(left: index == 0 ? 0 : 16),
+                child: _buildCard(items[index]),
+              );
+            },
+          ),
+        );
         },
       ),
     );
