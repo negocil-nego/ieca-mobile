@@ -99,6 +99,7 @@ class _PsalmContentBottomSheetState extends State<PsalmContentBottomSheet>
               key: ValueKey(_currentItem.id),
               title: _currentItem.name,
               future: _viewModel.findContentByPsalmsTitle(_currentItem),
+              separateActions: true,
               actions: [
                 ActionButton(icon: AppIcon.share, onPressed: _shareAll),
                 ActionButton(
@@ -123,7 +124,7 @@ class _PsalmContentBottomSheetState extends State<PsalmContentBottomSheet>
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
-                              color: Color(0xFFE61E62),
+                              color: AppColors.primary,
                             ),
                           ),
                           const Spacer(),

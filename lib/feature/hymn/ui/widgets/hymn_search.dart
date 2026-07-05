@@ -84,7 +84,7 @@ class _HymnSearchState extends State<HymnSearch> {
       spans.add(TextSpan(
         text: text.substring(idx, idx + query.length),
         style: const TextStyle(
-          color: Color(0xFFE61E62),
+          color: AppColors.primary,
           fontWeight: FontWeight.bold,
         ),
       ));

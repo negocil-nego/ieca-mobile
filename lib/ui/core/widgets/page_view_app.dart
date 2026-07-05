@@ -26,21 +26,24 @@ class _PageViewAppState extends State<PageViewApp> {
       return PersistentBottomNavBarItem(
         icon: item.navigation.icon,
         title: item.navigation.label,
-        activeColorPrimary: Colors.pinkAccent,
+        activeColorPrimary: AppColors.primary,
         inactiveColorPrimary: Colors.grey,
-        activeColorSecondary: Colors.pinkAccent,
+        activeColorSecondary: AppColors.primary,
       );
     });
   }
 
+  late final NavTabProvider _navTabProvider;
+
   @override
   void initState() {
     super.initState();
-    context.read<NavTabProvider>().addListener(_onNavChanged);
+    _navTabProvider = context.read<NavTabProvider>();
+    _navTabProvider.addListener(_onNavChanged);
   }
 
   void _onNavChanged() {
-    final navIndex = context.read<NavTabProvider>().navIndex;
+    final navIndex = _navTabProvider.navIndex;
     if (_controller.index != navIndex) {
       _controller.jumpToTab(navIndex);
     }
@@ -48,7 +51,7 @@ class _PageViewAppState extends State<PageViewApp> {
 
   @override
   void dispose() {
-    context.read<NavTabProvider>().removeListener(_onNavChanged);
+    _navTabProvider.removeListener(_onNavChanged);
     super.dispose();
   }
 

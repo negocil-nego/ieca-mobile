@@ -33,7 +33,7 @@ class _HymnGroupCategoryState extends State<HymnGroupCategory> {
               onPressed: () {},
               child: const Text(
                 'Ver todos',
-                style: TextStyle(color: Colors.pinkAccent),
+                style: TextStyle(color: AppColors.primary),
               ),
             ),
           ],

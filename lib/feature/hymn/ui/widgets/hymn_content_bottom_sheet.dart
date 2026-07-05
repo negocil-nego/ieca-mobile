@@ -120,6 +120,16 @@ class _HymnContentBottomSheetState extends State<HymnContentBottomSheet> {
                 const Spacer(),
                 ActionButton(icon: AppIcon.share, onPressed: _shareAll),
                 ActionButton(
+                  icon: AppIcon.report,
+                  color: AppColors.primary,
+                  onPressed: () => showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    useSafeArea: true,
+                    builder: (_) => const ReportErrorSheet(),
+                  ),
+                ),
+                ActionButton(
                   icon: AppIcon.favoriteBorder,
                   activeIcon: AppIcon.favorite,
                   isActive: _isFavorite,

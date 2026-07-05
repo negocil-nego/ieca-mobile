@@ -47,7 +47,7 @@ class PageListTile extends StatelessWidget {
       spans.add(TextSpan(
         text: text.substring(idx, idx + query.length),
         style: const TextStyle(
-          color: Color(0xFFE61E62),
+          color: AppColors.primary,
           fontWeight: FontWeight.bold,
         ),
       ));
@@ -75,7 +75,7 @@ class PageListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xFFE61E62);
+    const primaryColor = AppColors.primary;
 
     return ListTile(
         shape: RoundedRectangleBorder(

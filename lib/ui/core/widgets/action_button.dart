@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/_import.dart';
 
 class ActionButton extends StatelessWidget {
   final IconData? icon;
@@ -20,7 +21,7 @@ class ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeColor = color ?? const Color(0xFFE61E62);
+    final themeColor = color ?? AppColors.primary;
     final effectiveColor = onPressed != null ? themeColor : Colors.grey.shade400;
 
     return Padding(

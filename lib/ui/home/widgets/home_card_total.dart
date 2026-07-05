@@ -101,7 +101,7 @@ class _SummaryCard extends StatelessWidget {
             children: [
               Icon(
                 icons[item.label],
-                color: Colors.pinkAccent,
+                color: AppColors.primary,
                 size: 20,
               ),
               const SizedBox(width: 10),

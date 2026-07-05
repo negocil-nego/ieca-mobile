@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/_import.dart';
 
 class BulletItem extends StatelessWidget {
   final String title;
@@ -16,7 +17,7 @@ class BulletItem extends StatelessWidget {
           width: 8,
           height: 8,
           decoration: const BoxDecoration(
-            color: Color(0xFFE61E62),
+            color: AppColors.primary,
             shape: BoxShape.circle,
           ),
         ),

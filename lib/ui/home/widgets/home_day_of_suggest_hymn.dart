@@ -55,7 +55,7 @@ class _HomeDayOfSuggestHymnState extends State<HomeDayOfSuggestHymn> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.pinkAccent,
+        color: AppColors.primary,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Stack(

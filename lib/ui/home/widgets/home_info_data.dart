@@ -13,9 +13,9 @@ class HomeInfoData extends StatelessWidget {
         child: Column(
           children: [
             TabBar(
-              labelColor: const Color(0xFFE61E62),
+              labelColor: AppColors.primary,
               unselectedLabelColor: Colors.grey,
-              indicatorColor: const Color(0xFFE61E62),
+              indicatorColor: AppColors.primary,
               labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
               tabs: const [
                 Tab(text: "Histórico"),

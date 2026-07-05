@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/_import.dart';
 
 class ContentTabScreen extends StatelessWidget {
   final Widget normalTab;
@@ -17,9 +18,9 @@ class ContentTabScreen extends StatelessWidget {
       child: Column(
         children: [
           TabBar(
-            labelColor: const Color(0xFFE61E62),
+            labelColor: AppColors.primary,
             unselectedLabelColor: Colors.grey,
-            indicatorColor: const Color(0xFFE61E62),
+            indicatorColor: AppColors.primary,
             tabs: const [
               Tab(text: "Normal"),
               Tab(text: "Favoritos"),

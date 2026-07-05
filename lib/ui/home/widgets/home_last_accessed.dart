@@ -149,7 +149,7 @@ class _BadgeTabBar extends StatelessWidget {
       ),
       child: TabBar(
         indicator: BoxDecoration(
-          color: const Color(0xFFE61E62),
+          color: AppColors.primary,
           borderRadius: BorderRadius.circular(20),
         ),
         indicatorSize: TabBarIndicatorSize.tab,
@@ -192,7 +192,7 @@ class _InfoCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: isFirst ? const Color(0xFFE61E62).withAlpha(60) : Colors.grey.shade200),
+        border: Border.all(color: isFirst ? AppColors.primary.withAlpha(60) : Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(8),
@@ -207,14 +207,14 @@ class _InfoCard extends StatelessWidget {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: isFirst ? const Color(0xFFE61E62) : const Color(0xFFE61E62).withAlpha(30),
+              color: isFirst ? AppColors.primary : AppColors.primary.withAlpha(30),
               shape: BoxShape.circle,
             ),
             alignment: Alignment.center,
             child: Text(
               "$number",
               style: TextStyle(
-                color: isFirst ? Colors.white : const Color(0xFFE61E62),
+                color: isFirst ? Colors.white : AppColors.primary,
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
               ),

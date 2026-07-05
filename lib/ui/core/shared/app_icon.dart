@@ -34,6 +34,7 @@ final class AppIcon {
   static const phone = Icons.phone_outlined;
   static const email = Icons.email_outlined;
   static const place = Icons.place_outlined;
+  static const report = Icons.flag_outlined;
 
   // -- HugeIcon widget factories (for navigation tabs) --
   static HugeIcon homeIcon({double size = 16, Color? color, double strokeWidth = 1}) => HugeIcon(

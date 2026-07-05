@@ -48,6 +48,19 @@ class ContentBottomSheet<T> extends StatelessWidget {
                 ...actions.expand(
                   (w) => [const SizedBox(width: 2), w],
                 ).skip(1),
+                const SizedBox(width: 2),
+                IconButton(
+                  icon: Icon(AppIcon.report, size: 18, color: AppColors.primary),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
+                  tooltip: 'Reportar erro',
+                  onPressed: () => showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    useSafeArea: true,
+                    builder: (_) => const ReportErrorSheet(),
+                  ),
+                ),
               ],
             ),
           ),

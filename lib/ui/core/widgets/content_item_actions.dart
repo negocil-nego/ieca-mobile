@@ -39,6 +39,18 @@ class ContentItemActions extends StatelessWidget {
           tooltip: 'Partilhar',
           onPressed: () => SharePlus.instance.share(ShareParams(text: text)),
         ),
+        const SizedBox(width: 12),
+        _ActionButton(
+          icon: AppIcon.report,
+          size: iconSize,
+          tooltip: 'Reportar erro',
+          onPressed: () => showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            useSafeArea: true,
+            builder: (_) => const ReportErrorSheet(),
+          ),
+        ),
       ],
     );
   }
@@ -60,14 +72,14 @@ class _ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: const Color(0xFFE61E62).withAlpha(25),
+      color: AppColors.primary.withAlpha(25),
       shape: const CircleBorder(),
       child: InkWell(
         customBorder: const CircleBorder(),
         onTap: onPressed,
         child: Padding(
           padding: const EdgeInsets.all(6),
-          child: Icon(icon, size: size, color: const Color(0xFFE61E62)),
+          child: Icon(icon, size: size, color: AppColors.primary),
         ),
       ),
     );

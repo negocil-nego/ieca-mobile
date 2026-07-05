@@ -128,7 +128,7 @@ class _LitanyContentBottomSheetState extends State<LitanyContentBottomSheet>
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
-                              color: Color(0xFFE61E62),
+                              color: AppColors.primary,
                             ),
                           ),
                           const Spacer(),

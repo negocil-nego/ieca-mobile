@@ -47,7 +47,7 @@ class _HymnNumberGridState extends State<HymnNumberGrid> {
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFFE61E62),
+                      color: AppColors.primary,
                     ),
                   ),
                   const SizedBox(height: 10,),
@@ -159,7 +159,7 @@ class _HymnNumberCardState extends State<_HymnNumberCard> {
               child: Icon(
                 _isFavorite ? AppIcon.favorite : AppIcon.favoriteBorder,
                 size: 12,
-                color: const Color(0xFFE61E62),
+                color: AppColors.primary,
               ),
             ),
           ),

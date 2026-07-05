@@ -24,7 +24,7 @@ class ContentNavButtons extends StatelessWidget {
         children: [
           FloatingActionButton.small(
             heroTag: null,
-            backgroundColor: hasPrevious ? const Color(0xFFE61E62) : Colors.grey.shade300,
+            backgroundColor: hasPrevious ? AppColors.primary : Colors.grey.shade300,
             onPressed: hasPrevious ? onPrevious : null,
             child: Icon(
               AppIcon.chevronLeft,
@@ -33,7 +33,7 @@ class ContentNavButtons extends StatelessWidget {
           ),
           FloatingActionButton.small(
             heroTag: null,
-            backgroundColor: hasNext ? const Color(0xFFE61E62) : Colors.grey.shade300,
+            backgroundColor: hasNext ? AppColors.primary : Colors.grey.shade300,
             onPressed: hasNext ? onNext : null,
             child: Icon(
               AppIcon.chevronRight,
