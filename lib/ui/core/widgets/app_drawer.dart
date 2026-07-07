@@ -51,8 +51,31 @@ class _AppDrawerState extends State<AppDrawer> {
             ),
           ),
           Expanded(
-            child: Column(
+            child: ListView(
+              padding: EdgeInsets.zero,
               children: [
+                const _SectionHeader(title: "Orações"),
+                ListTile(
+                  leading: const Icon(AppIcon.menuBook),
+                  title: const Text("Credo Apostólico"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const CreedPage()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(AppIcon.book),
+                  title: const Text("Oração do Senhor"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const LordPrayerPage()),
+                    );
+                  },
+                ),
+                const _SectionHeader(title: "Aplicativo"),
                 ListTile(
                   leading: const Icon(AppIcon.privacy),
                   title: const Text("Política de privacidade"),
@@ -83,20 +106,31 @@ class _AppDrawerState extends State<AppDrawer> {
                     );
                   },
                 ),
-                ListTile(
-                  leading: const Icon(AppIcon.menuBook),
-                  title: const Text("Credo Apostólico"),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const CreedPage()),
-                    );
-                  },
-                ),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  final String title;
+  const _SectionHeader({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: Colors.grey.shade500,
+          letterSpacing: 0.5,
+        ),
       ),
     );
   }
