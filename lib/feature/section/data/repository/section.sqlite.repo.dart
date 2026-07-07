@@ -34,6 +34,26 @@ class SectionSqliteRepo implements ISectionRepo {
   }
 
   @override
+  Future<Result<Section>> findByCode(String code) async {
+    try {
+      final db = await openAppDatabase();
+      final rows = await db.query(
+        'tb_sections',
+        where: 'code = ?',
+        whereArgs: [code],
+        limit: 1,
+      );
+      if (rows.isEmpty) {
+        return Result.error(Exception("Nenhuma seção encontrada com code: $code"));
+      }
+      final section = SectionMapper.toMapper(rows.first);
+      return Result.ok(section);
+    } catch (e) {
+      return Result.error(Exception("Erro ao buscar seção por code: $e"));
+    }
+  }
+
+  @override
   Future<Result<void>> updateDefault(Section section) async {
     try {
       final db = await openAppDatabase();

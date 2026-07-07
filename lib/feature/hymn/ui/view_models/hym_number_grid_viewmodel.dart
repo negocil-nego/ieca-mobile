@@ -11,6 +11,10 @@ class HymNumberGridViewModel {
     return await _service.findByHymnsGroup(hymnsGroup);
   }
 
+  Future<Result<List<HymnsNumber>>> findAdditionalByGroup(HymnsGroup hymnsGroup) async {
+    return await _service.findAdditionalByGroup(hymnsGroup);
+  }
+
   Future<Result<List<HymnsNumber>>> findFavouritesByGroup(HymnsGroup hymnsGroup) async {
     return await _service.findFavouritesByGroup(hymnsGroup);
   }

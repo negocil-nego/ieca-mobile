@@ -11,6 +11,10 @@ class HymGroupCategoryViewModel {
     return await _service.findBySection(section);
   }
 
+  Future<Result<List<HymnsGroup>>> findAdditionalBySection(Section section) async {
+    return await _service.findAdditionalBySection(section);
+  }
+
   Future<Result<List<HymnsGroup>>> findFavouriteBySection(Section section) async {
     return await _service.findFavouriteBySection(section);
   }

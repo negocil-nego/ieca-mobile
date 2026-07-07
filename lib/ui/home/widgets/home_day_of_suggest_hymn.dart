@@ -162,7 +162,7 @@ class _HomeDayOfSuggestHymnState extends State<HomeDayOfSuggestHymn> {
 
   Widget _buildCard(Map<String, dynamic> data) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
       decoration: BoxDecoration(
         color: AppColors.primary,
         borderRadius: BorderRadius.circular(15),
@@ -173,17 +173,17 @@ class _HomeDayOfSuggestHymnState extends State<HomeDayOfSuggestHymn> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(data["label"], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
-              const SizedBox(height: 8),
-              Text(data["title"], style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              Text(data["desc"], style: const TextStyle(color: Colors.white70, fontSize: 13)),
+              Text(data["label"], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12), maxLines: 1, overflow: TextOverflow.ellipsis),
+              const SizedBox(height: 4),
+              Text(data["title"], style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
+              const SizedBox(height: 4),
+              Text(data["desc"], style: const TextStyle(color: Colors.white70, fontSize: 12), maxLines: 2, overflow: TextOverflow.ellipsis),
             ],
           ),
           Positioned(
             right: -10,
             bottom: -10,
-            child: Icon(data["icon"], size: 80, color: Colors.white.withAlpha(50)),
+            child: Icon(data["icon"], size: 70, color: Colors.white.withAlpha(50)),
           ),
         ],
       ),

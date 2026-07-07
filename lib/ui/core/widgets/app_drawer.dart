@@ -83,6 +83,16 @@ class _AppDrawerState extends State<AppDrawer> {
                     );
                   },
                 ),
+                ListTile(
+                  leading: const Icon(AppIcon.menuBook),
+                  title: const Text("Credo Apostólico"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const CreedPage()),
+                    );
+                  },
+                ),
               ],
             ),
           ),

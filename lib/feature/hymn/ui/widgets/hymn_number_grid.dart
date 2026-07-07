@@ -4,11 +4,13 @@ import 'package:mobile/_import.dart';
 class HymnNumberGrid extends StatefulWidget {
   final HymnsGroup hymnsGroup;
   final bool showFavouritesOnly;
+  final bool showAdditionalOnly;
 
   const HymnNumberGrid({
     super.key,
     required this.hymnsGroup,
     this.showFavouritesOnly = false,
+    this.showAdditionalOnly = false,
   });
 
   @override
@@ -19,6 +21,9 @@ class _HymnNumberGridState extends State<HymnNumberGrid> {
   final HymNumberGridViewModel _viewModel = HymNumberGridViewModel();
 
   Future<Result<List<HymnsNumber>>> _fetch() {
+    if (widget.showAdditionalOnly) {
+      return _viewModel.findAdditionalByGroup(widget.hymnsGroup);
+    }
     if (widget.showFavouritesOnly) {
       return _viewModel.findFavouritesByGroup(widget.hymnsGroup);
     }
@@ -36,7 +41,7 @@ class _HymnNumberGridState extends State<HymnNumberGrid> {
             keyValue: ValueKey('${widget.hymnsGroup.id}_${widget.showFavouritesOnly}'),
             future: _fetch(),
             builder: (context, items) {
-              if (items.isEmpty && widget.showFavouritesOnly) {
+              if (items.isEmpty && (widget.showFavouritesOnly || widget.showAdditionalOnly)) {
                 return const SizedBox.shrink();
               }
               return Column(

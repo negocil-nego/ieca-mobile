@@ -5,5 +5,6 @@ abstract class IHymnGroupService {
   final IHymnGroupRepo repo;
 
   Future<Result<List<HymnsGroup>>> findBySection(Section section) => repo.findBySection(section);
+  Future<Result<List<HymnsGroup>>> findAdditionalBySection(Section section) => repo.findAdditionalBySection(section);
   Future<Result<List<HymnsGroup>>> findFavouriteBySection(Section section) => repo.findFavouriteBySection(section);
 }

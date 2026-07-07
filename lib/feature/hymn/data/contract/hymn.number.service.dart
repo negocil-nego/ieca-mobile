@@ -7,6 +7,7 @@ abstract class IHymnNumberService {
   Future<int> count() => repo.count();
   Future<int> countBySection(Section section) => repo.countBySection(section);
   Future<Result<List<HymnsNumber>>> findByHymnsGroup(HymnsGroup hymnsGroup) => repo.findByHymnsGroup(hymnsGroup);
+  Future<Result<List<HymnsNumber>>> findAdditionalByGroup(HymnsGroup hymnsGroup) => repo.findAdditionalByGroup(hymnsGroup);
   Future<Result<List<HymnsNumber>>> findFavouritesBySection(Section section) => repo.findFavouritesBySection(section);
   Future<Result<List<HymnsNumber>>> findFavouritesByGroup(HymnsGroup hymnsGroup) => repo.findFavouritesByGroup(hymnsGroup);
   Future<Result<List<HymnsNumber>>> findLastAccessedBySection(Section section, {int limit = 10}) => repo.findLastAccessedBySection(section, limit: limit);

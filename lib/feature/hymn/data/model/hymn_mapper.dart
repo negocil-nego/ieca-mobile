@@ -29,6 +29,7 @@ final class HymnNumberMapper {
       code: row['code'] as String,
       num: row['num'] as int,
       hymnsGroup: hymnsGroup,
+      type: (row['type'] as String?) ?? HymnNumberType.NORMAL,
       lastAccessedAt: lastAccessedRaw != null ? DateTime.fromMillisecondsSinceEpoch(lastAccessedRaw) : null,
       isFavorite: (row['is_favorite'] as int?) == 1,
       accessCount: (row['access_count'] as int?) ?? 0,

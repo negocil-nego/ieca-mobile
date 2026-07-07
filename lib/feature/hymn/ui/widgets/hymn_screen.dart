@@ -49,6 +49,7 @@ class _HymnScreenState extends State<HymnScreen> {
               return const Expanded(
                 child: ContentTabScreen(
                   normalTab: HymnTab(),
+                  additionalTab: HymnTabAdditional(),
                   favouritesTab: HymnTabFavourite(),
                 ),
               );
