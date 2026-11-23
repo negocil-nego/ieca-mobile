@@ -44,6 +44,8 @@ dependencies:
   share_plus: ^13.2.0
   package_info_plus: ^10.2.0
 
+  material_ui: any
+  cupertino_ui: any
 dev_dependencies:
   flutter_launcher_icons: ^0.14.4
   flutter_test:
